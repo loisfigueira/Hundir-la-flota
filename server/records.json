@@ -1,0 +1,20 @@
+{
+    "players": {
+        "peruco": {
+            "playerName": "peruco",
+            "gamesPlayed": 0,
+            "gamesWon": 0,
+            "gamesLost": 0,
+            "pveWon": 0,
+            "pveLost": 0,
+            "totalShots": 0,
+            "totalHits": 0,
+            "winStreak": 0,
+            "bestWinStreak": 0,
+            "averageAccuracy": 0,
+            "bestAccuracy": 0,
+            "fastestWinTurns": 0,
+            "totalPlayTimeSeconds": 0
+        }
+    }
+}
