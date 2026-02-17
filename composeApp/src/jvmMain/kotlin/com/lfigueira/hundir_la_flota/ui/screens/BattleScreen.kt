@@ -111,25 +111,29 @@ fun BattleScreen(viewModel: GameViewModel) {
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 BoardContainer(label = "MI FLOTA", size = finalBoardSize) {
-                                    SonarGrid(
-                                        boardState = state.myBoard,
-                                        isRadar = false,
-                                        onCellClick = {},
-                                        modifier = Modifier.size(finalBoardSize) // Pasa tamaño calculado
-                                    )
+                                    key(gridSize) {
+                                        SonarGrid(
+                                            boardState = state.myBoard,
+                                            isRadar = false,
+                                            onCellClick = {},
+                                            modifier = Modifier.size(finalBoardSize)
+                                        )
+                                    }
                                 }
                                 
                                 Spacer(Modifier.height(16.dp))
                                 
                                 BoardContainer(label = "RADAR ENEMIGO", size = finalBoardSize) {
-                                    SonarGrid(
-                                        boardState = state.opponentBoard,
-                                        isRadar = true,
-                                        onCellClick = { coord ->
-                                            if (isMyTurn) viewModel.sendAttack(coord)
-                                        },
-                                        modifier = Modifier.size(finalBoardSize) // Pasa tamaño calculado
-                                    )
+                                    key(gridSize) {
+                                        SonarGrid(
+                                            boardState = state.opponentBoard,
+                                            isRadar = true,
+                                            onCellClick = { coord ->
+                                                if (isMyTurn) viewModel.sendAttack(coord)
+                                            },
+                                            modifier = Modifier.size(finalBoardSize)
+                                        )
+                                    }
                                 }
                             }
                         } else {
@@ -139,25 +143,29 @@ fun BattleScreen(viewModel: GameViewModel) {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 BoardContainer(label = "MI FLOTA", size = finalBoardSize) {
-                                    SonarGrid(
-                                        boardState = state.myBoard,
-                                        isRadar = false,
-                                        onCellClick = {},
-                                        modifier = Modifier.size(finalBoardSize) // Pasa tamaño calculado
-                                    )
+                                    key(gridSize) {
+                                        SonarGrid(
+                                            boardState = state.myBoard,
+                                            isRadar = false,
+                                            onCellClick = {},
+                                            modifier = Modifier.size(finalBoardSize)
+                                        )
+                                    }
                                 }
                                 
                                 Spacer(Modifier.width(32.dp))
                                 
                                 BoardContainer(label = "RADAR ENEMIGO", size = finalBoardSize) {
-                                    SonarGrid(
-                                        boardState = state.opponentBoard,
-                                        isRadar = true,
-                                        onCellClick = { coord ->
-                                            if (isMyTurn) viewModel.sendAttack(coord)
-                                        },
-                                        modifier = Modifier.size(finalBoardSize) // Pasa tamaño calculado
-                                    )
+                                    key(gridSize) {
+                                        SonarGrid(
+                                            boardState = state.opponentBoard,
+                                            isRadar = true,
+                                            onCellClick = { coord ->
+                                                if (isMyTurn) viewModel.sendAttack(coord)
+                                            },
+                                            modifier = Modifier.size(finalBoardSize)
+                                        )
+                                    }
                                 }
                             }
                         }

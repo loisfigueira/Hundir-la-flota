@@ -111,7 +111,14 @@ class GameViewModel(
      */
     fun findPvPMatch() {
         viewModelScope.launch {
-            AppLogger.info("GameViewModel", "Iniciando matchmaking PVP con config: ${_currentConfig.value}")
+            val config = _currentConfig.value
+            AppLogger.info("GameViewModel", "Iniciando matchmaking PVP. BoardSize=${config.boardSize}, TurnTime=${config.turnTimeSeconds}")
+            
+            if (config.boardSize == 0 || config.boardSize < 8 || config.boardSize > 15) {
+                AppLogger.error("GameViewModel", "Config inválido: boardSize=${config.boardSize}. Usando default.", null)
+                _currentConfig.value = GameConfig(boardSize = 10)
+            }
+            
             gameClient.send(GameMessage.Matchmaking.FindPvP(_currentConfig.value))
             _uiState.value = UIState.Matchmaking
         }
@@ -122,7 +129,14 @@ class GameViewModel(
      */
     fun findPvEMatch(difficulty: AIDifficulty = AIDifficulty.MEDIUM) {
         viewModelScope.launch {
-            AppLogger.info("GameViewModel", "Iniciando partida PVE contra $difficulty con config: ${_currentConfig.value}")
+            val config = _currentConfig.value
+            AppLogger.info("GameViewModel", "Iniciando partida PVE vs $difficulty. BoardSize=${config.boardSize}, TurnTime=${config.turnTimeSeconds}, MaxRounds=${config.maxRounds}")
+            
+            if (config.boardSize == 0 || config.boardSize < 8 || config.boardSize > 15) {
+                AppLogger.error("GameViewModel", "Config inválido: boardSize=${config.boardSize}. Usando default.", null)
+                _currentConfig.value = GameConfig(boardSize = 10)
+            }
+            
             gameClient.send(GameMessage.Action.StartGamePVE(_currentConfig.value, difficulty))
         }
     }
@@ -130,8 +144,15 @@ class GameViewModel(
     // --- MÉTODOS SALA PRIVADA ---
     fun createRoom() {
         viewModelScope.launch {
-             AppLogger.info("GameViewModel", "Creando sala privada con config: ${_currentConfig.value}")
-             gameClient.send(GameMessage.Matchmaking.CreateRoom(_currentConfig.value))
+            val config = _currentConfig.value
+            AppLogger.info("GameViewModel", "Creando sala privada. BoardSize=${config.boardSize}, TurnTime=${config.turnTimeSeconds}")
+            
+            if (config.boardSize == 0 || config.boardSize < 8 || config.boardSize > 15) {
+                AppLogger.error("GameViewModel", "Config inválido: boardSize=${config.boardSize}. Usando default.", null)
+                _currentConfig.value = GameConfig(boardSize = 10)
+            }
+            
+            gameClient.send(GameMessage.Matchmaking.CreateRoom(_currentConfig.value))
         }
     }
     
@@ -189,12 +210,17 @@ class GameViewModel(
      */
     fun sendAttack(coordinate: Coordinate) {
         val currentTurn = _currentGameState.value?.currentTurn
-        if (currentTurn != myPlayerId) {
-            AppLogger.info("GameViewModel", "Intento de disparo fuera de turno en (${coordinate.x}, ${coordinate.y}).")
+        val myId = myPlayerId
+        
+        AppLogger.debug("GameViewModel", "Click en (${coordinate.x}, ${coordinate.y}). CurrentTurn=$currentTurn, MyPlayerId='$myId', Match=${currentTurn == myId}")
+        
+        if (currentTurn != myId) {
+            AppLogger.info("GameViewModel", "Intento de disparo fuera de turno. CurrentTurn=$currentTurn, MyId=$myId")
+            _notification.value = "No es tu turno"
             return
         }
         viewModelScope.launch {
-            AppLogger.debug("GameViewModel", "Enviando ataque a (${coordinate.x}, ${coordinate.y})")
+            AppLogger.info("GameViewModel", "Enviando ataque a (${coordinate.x}, ${coordinate.y})")
             gameClient.send(GameMessage.Action.Attack(coordinate))
         }
     }
@@ -434,6 +460,11 @@ class GameViewModel(
                 AppLogger.info("GameViewModel", "Estadísticas recibidas. Actualizando Leaderboard y PlayerStats.")
                 _playerStats.value = message.playerStats
                 _leaderboard.value = message.leaderboard
+            }
+
+            is GameMessage.Connection.Welcome -> {
+                myPlayerId = message.playerId
+                AppLogger.info("GameViewModel", "Welcome recibido. MyPlayerId establecido a: '$myPlayerId'")
             }
             
             else -> {}

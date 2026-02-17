@@ -2,17 +2,16 @@
     "players": {
         "peruco": {
             "playerName": "peruco",
-            "gamesPlayed": 0,
-            "gamesWon": 0,
+            "gamesPlayed": 1,
+            "gamesWon": 1,
             "gamesLost": 0,
-            "pveWon": 0,
-            "pveLost": 0,
-            "totalShots": 0,
-            "totalHits": 0,
-            "winStreak": 0,
-            "bestWinStreak": 0,
-            "averageAccuracy": 0,
-            "bestAccuracy": 0,
+            "pveWon": 1,
+            "totalShots": 68,
+            "totalHits": 30,
+            "winStreak": 1,
+            "bestWinStreak": 1,
+            "averageAccuracy": 44.11764705882353,
+            "bestAccuracy": 44.11764705882353,
             "fastestWinTurns": 0,
             "totalPlayTimeSeconds": 0
         }

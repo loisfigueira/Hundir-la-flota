@@ -62,6 +62,7 @@ class GameSession(
         // En PvE, generamos los barcos del bot inmediatamente
         if (isPvE) {
             setupBotShips()
+            AppLogger.info("GameSession", "[GameSession-$gameId] Bot Hunter inicializado con ${player2Ships.size} barcos en tablero ${boardSize}x${boardSize}")
         }
     }
 
@@ -307,6 +308,7 @@ class GameSession(
                 finishGame(winner = if (isP1Turn) player1 else player2)
             } else {
                 // El cambio de turno ahora se encarga de notificar
+                AppLogger.debug("GameSession", "[GameSession-$gameId] Disparo procesado. Cambiando turno. Turno actual era: $currentTurnPlayerId")
                 switchTurn()
             }
         }
