@@ -2,17 +2,33 @@
     "players": {
         "peruco": {
             "playerName": "peruco",
-            "gamesPlayed": 1,
-            "gamesWon": 1,
-            "gamesLost": 0,
-            "pveWon": 1,
-            "totalShots": 68,
-            "totalHits": 30,
-            "winStreak": 1,
-            "bestWinStreak": 1,
-            "averageAccuracy": 44.11764705882353,
-            "bestAccuracy": 44.11764705882353,
+            "gamesPlayed": 4,
+            "gamesWon": 3,
+            "gamesLost": 1,
+            "pvpWon": 1,
+            "pveWon": 2,
+            "pveLost": 1,
+            "totalShots": 172,
+            "totalHits": 90,
+            "winStreak": 0,
+            "bestWinStreak": 3,
+            "averageAccuracy": 52.32558139534884,
+            "bestAccuracy": 100.0,
             "fastestWinTurns": 0,
+            "totalPlayTimeSeconds": 0
+        },
+        "paco": {
+            "playerName": "paco",
+            "gamesPlayed": 1,
+            "gamesWon": 0,
+            "gamesLost": 1,
+            "pvpLost": 1,
+            "totalShots": 29,
+            "totalHits": 21,
+            "winStreak": 0,
+            "bestWinStreak": 0,
+            "averageAccuracy": 72.41379310344827,
+            "bestAccuracy": 72.41379310344827,
             "totalPlayTimeSeconds": 0
         }
     }

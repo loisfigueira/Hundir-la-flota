@@ -430,25 +430,65 @@ class GameSession(
 
     
     // Método privado, llamado por handleAction
+    /**
+     * Maneja el abandono voluntario de la partida.
+     * El jugador que abandona pierde y el oponente gana automáticamente.
+     */
     private fun handleLeaveGame(player: ClientHandler) {
-        AppLogger.info("GameSession", "[GameSession-$gameId] Jugador ${player.playerName} abandonó la partida (LeaveGame).")
+        val leaver = player
+        val opponent = if (leaver == player1) player2 else player1
         
-        // Si hay oponente, notificarle que ganó por abandono
-        val opponent = if (player == player1) player2 else player1
-        if (opponent != null) {
-            val winnerId = opponent.clientId
-             gameScope.launch {
-                 try {
-                     // Calcular stats finales para el ganador (oponente)
-                     val winnerStats = calculateGameStats(if (player == player1) p2Stats else p1Stats, true)
-                     opponent.sendMessage(GameMessage.Response.GameOver(winnerId, winnerStats))
-                 } catch (e: Exception) {
-                     // Ignore
-                 }
-             }
+        AppLogger.info("GameSession", "[GameSession-$gameId] Jugador ${leaver.playerName} ha abandonado la partida. Procesando derrota por abandono.")
+        
+        gameScope.launch {
+            try {
+                // En PvP/PvE, el que abandona pierde la partida completa
+                val leaverIsP1 = leaver == player1
+                
+                // Calcular stats finales (abandonador = perdedor, oponente = ganador)
+                val leaverFinalStats = calculateGameStats(if (leaverIsP1) p1Stats else p2Stats, isWinner = false)
+                val opponentFinalStats = calculateGameStats(if (leaverIsP1) p2Stats else p1Stats, isWinner = true)
+                
+                val winnerId = opponent?.clientId ?: botId
+                val winnerName = opponent?.playerName ?: botName
+
+                // 1. Notificar GameOver a ambos
+                leaver.sendMessage(GameMessage.Response.GameOver(winnerId, leaverFinalStats))
+                opponent?.sendMessage(GameMessage.Response.GameOver(winnerId, opponentFinalStats))
+
+                // 2. Persistencia: Actualizar records de ambos
+                AppLogger.info("GameSession", "[GameSession-$gameId] Guardando records por abandono de ${leaver.playerName}. Ganador: $winnerName")
+                
+                // Estadísticas del abandonador
+                recordsManager.updatePlayerStats(
+                    leaver.playerName,
+                    won = false,
+                    shots = leaverFinalStats.totalShots,
+                    hits = leaverFinalStats.successfulHits,
+                    playTimeSeconds = leaverFinalStats.gameDurationSeconds,
+                    isPvP = !isPvE,
+                    turns = if (leaverIsP1) p1Stats.turns else p2Stats.turns
+                )
+
+                // Estadísticas del ganador (oponente humano)
+                if (opponent != null) {
+                    recordsManager.updatePlayerStats(
+                        opponent.playerName,
+                        won = true,
+                        shots = opponentFinalStats.totalShots,
+                        hits = opponentFinalStats.successfulHits,
+                        playTimeSeconds = opponentFinalStats.gameDurationSeconds,
+                        isPvP = true,
+                        turns = if (!leaverIsP1) p1Stats.turns else p2Stats.turns
+                    )
+                }
+            } catch (e: Exception) {
+                AppLogger.error("GameSession", "Error procesando abandono: ${e.message}", e)
+            } finally {
+                // 3. Limpiar sesión
+                dispose()
+            }
         }
-        // Detener inmediatamente todo
-        dispose()
     }
 
     private suspend fun handleSurrender(player: ClientHandler) {

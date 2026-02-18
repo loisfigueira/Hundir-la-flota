@@ -76,8 +76,8 @@ data class GameConfig(
      * Valida que la configuración sea coherente.
      */
     fun validate(): Result<Unit> {
-        if (boardSize < 8 || boardSize > 15) {
-            return Result.failure(IllegalArgumentException("boardSize debe estar entre 8 y 15"))
+        if (boardSize < 7 || boardSize > 14) {
+            return Result.failure(IllegalArgumentException("boardSize debe estar entre 7 y 14"))
         }
         
         if (turnTimeSeconds < 10 || turnTimeSeconds > 300) {

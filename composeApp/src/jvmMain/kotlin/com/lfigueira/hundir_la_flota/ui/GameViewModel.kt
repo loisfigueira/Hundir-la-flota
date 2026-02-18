@@ -114,7 +114,7 @@ class GameViewModel(
             val config = _currentConfig.value
             AppLogger.info("GameViewModel", "Iniciando matchmaking PVP. BoardSize=${config.boardSize}, TurnTime=${config.turnTimeSeconds}")
             
-            if (config.boardSize == 0 || config.boardSize < 8 || config.boardSize > 15) {
+            if (config.boardSize == 0 || config.boardSize < 7 || config.boardSize > 14) {
                 AppLogger.error("GameViewModel", "Config inválido: boardSize=${config.boardSize}. Usando default.", null)
                 _currentConfig.value = GameConfig(boardSize = 10)
             }
@@ -132,7 +132,7 @@ class GameViewModel(
             val config = _currentConfig.value
             AppLogger.info("GameViewModel", "Iniciando partida PVE vs $difficulty. BoardSize=${config.boardSize}, TurnTime=${config.turnTimeSeconds}, MaxRounds=${config.maxRounds}")
             
-            if (config.boardSize == 0 || config.boardSize < 8 || config.boardSize > 15) {
+            if (config.boardSize == 0 || config.boardSize < 7 || config.boardSize > 14) {
                 AppLogger.error("GameViewModel", "Config inválido: boardSize=${config.boardSize}. Usando default.", null)
                 _currentConfig.value = GameConfig(boardSize = 10)
             }

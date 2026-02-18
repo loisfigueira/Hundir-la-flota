@@ -43,13 +43,9 @@ fun SonarGrid(
             .background(CyberColors.DarkSpace)
             .padding(2.dp)
     ) {
-        // Cálculo de celda dinámico
-        // Usamos el minimo entre ancho y alto para asegurar que sea cuadrado y quepa
-        val availableSize = minOf(maxWidth, maxHeight)
-        
-        // Calculamoe el tamaño base de celda
-        // Restamos un pequeño margen de seguridad
-        val cellSize = (availableSize * 0.98f) / boardSize
+        // Cálculo de celda dinámico - FUERZA EL TAMAÑO SEGÚN EL ANCHO DISPONIBLE
+        // val availableSize = minOf(maxWidth, maxHeight) // Eliminamos el minOf para seguir la instrucción verbatim
+        val cellSize = maxWidth / boardSize
         
         // Ajustamos grosores y tamaños de fuente según el tamaño de celda resultante
         val lineThickness = if (cellSize < 30.dp) 0.5.dp else 1.dp
@@ -58,6 +54,7 @@ fun SonarGrid(
         
         // Scroll de emergencia si la celda es demasiado pequeña para ser usable (ej < 15dp)
         // Aunque intentaremos que encaje, esto previene colapso total en pantallas diminutas
+        val availableSize = maxWidth
         val contentModifier = if (cellSize < 15.dp) {
              Modifier
                 .size((20.dp * boardSize)) // Forzamos mínimo usable

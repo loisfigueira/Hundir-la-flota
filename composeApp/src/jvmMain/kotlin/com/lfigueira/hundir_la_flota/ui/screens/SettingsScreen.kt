@@ -78,12 +78,12 @@ fun SettingsScreen(
                         SliderWithValue(
                             value = boardSize.toFloat(),
                             onValueChange = { boardSize = it.roundToInt() },
-                            valueRange = 8f..15f,
+                            valueRange = 7f..14f,
                             steps = 6,
                             label = "${boardSize}x${boardSize}"
                         )
                         Text(
-                            text = "Rango: 8x8 a 15x15",
+                            text = "Rango: 7x7 a 14x14",
                             fontSize = 12.sp,
                             color = CyberColors.textSecondary,
                             modifier = Modifier.padding(top = 4.dp)

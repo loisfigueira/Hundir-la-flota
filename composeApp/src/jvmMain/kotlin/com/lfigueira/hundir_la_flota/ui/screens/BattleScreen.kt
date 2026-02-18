@@ -2,6 +2,7 @@ package com.lfigueira.hundir_la_flota.ui.screens
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -77,94 +78,61 @@ fun BattleScreen(viewModel: GameViewModel) {
                         val availableWidth = maxWidth
                         val availableHeight = maxHeight
                         
-                        // 1. Obtener el tamaño real (Fuente de Verdad)
-                        // Extrae el tamaño directamente del estado o de la config por defecto
-                        val gridSize = state.myBoard.cells.size.takeIf { it > 0 } ?: viewModel.currentConfig.value.boardSize
+                        // 1. Fuente de Verdad Absoluta: El tamaño viene directamente del servidor
+                        // Usamos la configuración actual como fallback definitivo si el estado aún no tiene celdas
+                        val boardSize = state.opponentBoard.cells.size.takeIf { it > 0 } 
+                            ?: viewModel.currentConfig.value.boardSize
                         
-                        // Determinar layout
-                        val isPortrait = availableHeight > availableWidth
-                        
-                        // 2. Cálculo de Celda Dinámico
-                        // Calculamos el tamaño máximo posible para los tableros
-                        // Aumentamos el "padding" restado para asegurar que no toque los bordes (64dp en vez de 32dp)
-                        // También multiplicamos por 0.95f como factor de seguridad extra
-                        val (maxBoardWidth, maxBoardHeight) = if (isPortrait) {
-                            (availableWidth * 0.95f) to ((availableHeight - 64.dp) / 2)
-                        } else {
-                            ((availableWidth - 64.dp) / 2) to (availableHeight * 0.95f)
-                        }
-                        
-                        // Calculamos la celda basándonos en el espacio disponible y el grid real
-                        val sizeByWidth = maxBoardWidth / gridSize
-                        val sizeByHeight = maxBoardHeight / gridSize
-                        
-                        // Elegimos la menor para asegurar que quepa sin desbordar
-                        val cellSize = min(sizeByWidth.value, sizeByHeight.value).dp
-                        
-                        // Tamaño final del contenedor del tablero
-                        val finalBoardSize = cellSize * gridSize
+                        // 2. Cálculo de Tamaños Relativos
+                        // El Radar Enemigo es el principal. El minimapa es un overlay.
+                        val mainBoardScreenSize = min(availableWidth.value, availableHeight.value).dp * 0.88f
+                        val minimapSize = mainBoardScreenSize * 0.28f
 
-                        if (isPortrait) {
-                            Column(
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            // CAPA 1: RADAR ENEMIGO (Principal)
+                            Box(
                                 modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                contentAlignment = Alignment.Center
                             ) {
-                                BoardContainer(label = "MI FLOTA", size = finalBoardSize) {
-                                    key(gridSize) {
-                                        SonarGrid(
-                                            boardState = state.myBoard,
-                                            isRadar = false,
-                                            onCellClick = {},
-                                            modifier = Modifier.size(finalBoardSize)
-                                        )
-                                    }
-                                }
-                                
-                                Spacer(Modifier.height(16.dp))
-                                
-                                BoardContainer(label = "RADAR ENEMIGO", size = finalBoardSize) {
-                                    key(gridSize) {
+                                BoardContainer(label = "RADAR ENEMIGO (1:${boardSize})", size = mainBoardScreenSize) {
+                                    // LA CLAVE: key(boardSize) obliga a Compose a reconstruir el componente
+                                    // si el número de celdas cambia, eliminando cualquier rastro del 10x10.
+                                    key(boardSize) {
                                         SonarGrid(
                                             boardState = state.opponentBoard,
                                             isRadar = true,
                                             onCellClick = { coord ->
                                                 if (isMyTurn) viewModel.sendAttack(coord)
                                             },
-                                            modifier = Modifier.size(finalBoardSize)
+                                            modifier = Modifier.size(mainBoardScreenSize)
                                         )
                                     }
                                 }
                             }
-                        } else {
-                            Row(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
+
+                            // CAPA 2: MI FLOTA (Minimap Overlay)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(bottom = 12.dp, end = 12.dp),
+                                contentAlignment = Alignment.BottomEnd
                             ) {
-                                BoardContainer(label = "MI FLOTA", size = finalBoardSize) {
-                                    key(gridSize) {
-                                        SonarGrid(
-                                            boardState = state.myBoard,
-                                            isRadar = false,
-                                            onCellClick = {},
-                                            modifier = Modifier.size(finalBoardSize)
-                                        )
-                                    }
-                                }
-                                
-                                Spacer(Modifier.width(32.dp))
-                                
-                                BoardContainer(label = "RADAR ENEMIGO", size = finalBoardSize) {
-                                    key(gridSize) {
-                                        SonarGrid(
-                                            boardState = state.opponentBoard,
-                                            isRadar = true,
-                                            onCellClick = { coord ->
-                                                if (isMyTurn) viewModel.sendAttack(coord)
-                                            },
-                                            modifier = Modifier.size(finalBoardSize)
-                                        )
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier
+                                        .background(Color.Black.copy(alpha = 0.7f))
+                                        .padding(4.dp)
+                                        .border(1.dp, CyberColors.NeonBlue.copy(alpha = 0.3f))
+                                ) {
+                                    BoardContainer(label = "MI SECTOR", size = minimapSize) {
+                                        key(boardSize) {
+                                            SonarGrid(
+                                                boardState = state.myBoard,
+                                                isRadar = false,
+                                                onCellClick = {},
+                                                modifier = Modifier.size(minimapSize)
+                                            )
+                                        }
                                     }
                                 }
                             }
