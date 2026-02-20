@@ -27,6 +27,12 @@ in your IDE’s toolbar or run it directly from the terminal:
   .\gradlew.bat :server:run
   ```
 
+- comandos server
+```shell
+stats - Muestra las estadísticas del servidor
+stop - Detiene el servidor
+help - Muestra la ayuda
+```
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
