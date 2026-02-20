@@ -68,6 +68,11 @@ Para ejecutar todos los tests:
 ## Documentación
 
 Todo el código está documentado en **español** utilizando **KDoc**. Encontrarás explicaciones detalladas sobre el funcionamiento de los algoritmos de combate, la gestión de turnos y la tematización del sistema de diseño.
+- **Vídeo**: En la raíz del proyecto.
+- **Memoria del proyecto**: En la raíz del proyecto.
+- **Records.json**: En `server`
+- **Server.properties**: En `server/src/main/resources`
+- **INFO.md**: En la raíz del proyecto.
 
 ---
 **Desarrollado por**: Lois Figueira
