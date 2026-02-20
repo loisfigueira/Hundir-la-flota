@@ -27,7 +27,8 @@ fun OnlineMenuScreen(
     ) {
         Text(
             text = "OPERACIONES EN RED",
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.onBackground // Use theme token for headline color
         )
         
         Spacer(Modifier.height(48.dp))
@@ -36,10 +37,13 @@ fun OnlineMenuScreen(
         Button(
             onClick = { viewModel.findPvPMatch() },
             modifier = Modifier.width(320.dp).height(56.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = ModernColors.AmberGold),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            ),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text("MATCHMAKING OPERATIVO (PvP)", color = Color.Black, fontWeight = FontWeight.Bold)
+            Text("MATCHMAKING OPERATIVO (PvP)", fontWeight = FontWeight.Bold)
         }
         
         Spacer(Modifier.height(32.dp))
@@ -56,8 +60,8 @@ fun OnlineMenuScreen(
         OutlinedButton(
             onClick = { viewModel.createRoom() },
             modifier = Modifier.width(320.dp).height(48.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = ModernColors.primary),
-            border = androidx.compose.foundation.BorderStroke(1.dp, ModernColors.primary.copy(alpha = 0.5f))
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
         ) {
             Text("GENERAR CÓDIGO DE ACCESO")
         }
@@ -73,18 +77,18 @@ fun OnlineMenuScreen(
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                  colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = ModernColors.primary,
-                    unfocusedBorderColor = ModernColors.SlateGray
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
             Spacer(Modifier.width(8.dp))
             Button(
                 onClick = { viewModel.joinRoom(roomCode) },
                 enabled = roomCode.length >= 4,
-                colors = ButtonDefaults.buttonColors(containerColor = ModernColors.primary),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(4.dp)
             ) {
-                Text("UNIRSE", fontWeight = FontWeight.Bold)
+                Text("UNIRSE", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
             }
         }
         

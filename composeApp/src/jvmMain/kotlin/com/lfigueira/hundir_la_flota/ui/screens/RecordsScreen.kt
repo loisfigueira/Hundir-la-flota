@@ -27,7 +27,7 @@ fun RecordsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(ModernColors.backgroundDark)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         LazyColumn(
             modifier = Modifier
@@ -46,20 +46,20 @@ fun RecordsScreen(
                         Text(
                             text = "CENTRAL DE DATOS",
                             style = MaterialTheme.typography.headlineLarge,
-                            color = ModernColors.primary
+                            color = MaterialTheme.colorScheme.primary
                         )
                         Text(
                             text = "REGISTROS TÁCTICOS Y RENDIMIENTO",
                             style = MaterialTheme.typography.bodySmall,
-                            color = ModernColors.textSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     
                     OutlinedButton(
                         onClick = { viewModel.navigateToMainMenu() },
-                        border = androidx.compose.foundation.BorderStroke(1.dp, ModernColors.primary.copy(alpha = 0.5f))
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
                     ) {
-                        Text("SALIR AL NEXO", color = ModernColors.primary)
+                        Text("SALIR AL NEXO", color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -71,14 +71,14 @@ fun RecordsScreen(
                         Text(
                             text = "PERFIL OPERATIVO: ${playerStats.playerName}",
                             style = MaterialTheme.typography.titleMedium,
-                            color = ModernColors.secondary
+                            color = MaterialTheme.colorScheme.secondary
                         )
                         
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             StatsCard(
                                 title = "GENERAL",
                                 modifier = Modifier.weight(1f),
-                                color = ModernColors.primary
+                                color = MaterialTheme.colorScheme.primary
                             ) {
                                 StatGridItem("Despliegues", playerStats.gamesPlayed.toString())
                                 StatGridItem("Carrera W/L", "${playerStats.gamesWon} / ${playerStats.gamesLost}")
@@ -88,7 +88,7 @@ fun RecordsScreen(
                             StatsCard(
                                 title = "COMBATE PVP / PVE",
                                 modifier = Modifier.weight(1f),
-                                color = ModernColors.secondary
+                                color = MaterialTheme.colorScheme.secondary
                             ) {
                                 StatGridItem("PvP Victoria/Baja", "${playerStats.pvpWon} / ${playerStats.pvpLost}")
                                 StatGridItem("PvE Victoria/Baja", "${playerStats.pveWon} / ${playerStats.pveLost}")
@@ -100,7 +100,7 @@ fun RecordsScreen(
                             StatsCard(
                                 title = "HISTORIAL DE RACHAS",
                                 modifier = Modifier.weight(1f),
-                                color = ModernColors.primary
+                                color = MaterialTheme.colorScheme.primary
                             ) {
                                 StatGridItem("Racha Actual", playerStats.winStreak.toString())
                                 StatGridItem("Récord de Racha", playerStats.bestWinStreak.toString())
@@ -109,7 +109,7 @@ fun RecordsScreen(
                             StatsCard(
                                 title = "MÁXIMO RENDIMIENTO",
                                 modifier = Modifier.weight(1f),
-                                color = ModernColors.error
+                                color = MaterialTheme.colorScheme.error
                             ) {
                                 StatGridItem("Mejor Puntería", "${String.format("%.1f", playerStats.bestAccuracy)}%")
                                 StatGridItem("Asalto más veloz", if(playerStats.fastestWinTurns == Int.MAX_VALUE) "N/A" else "${playerStats.fastestWinTurns} turnos")
@@ -125,12 +125,12 @@ fun RecordsScreen(
                     Text(
                         text = "RANKING GLOBAL DE COMANDANTES",
                         style = MaterialTheme.typography.titleMedium,
-                        color = ModernColors.primary
+                        color = MaterialTheme.colorScheme.primary
                     )
                     
                     Card(
-                        modifier = Modifier.fillMaxWidth().border(1.dp, ModernColors.primary.copy(alpha = 0.2f)),
-                        colors = CardDefaults.cardColors(containerColor = ModernColors.DeepAsh.copy(alpha = 0.6f))
+                        modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
                     ) {
                         Column(Modifier.padding(16.dp)) {
                             // Table Header
@@ -138,24 +138,24 @@ fun RecordsScreen(
                                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text("RANGO", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(0.5f), color = ModernColors.secondary)
-                                Text("COMANDANTE", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(2f), color = ModernColors.primary)
-                                Text("WINS", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f), color = ModernColors.textSecondary)
-                                Text("RATIO", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f), color = ModernColors.textSecondary)
-                                Text("RACHA", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f), color = ModernColors.textSecondary)
+                                Text("RANGO", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(0.5f), color = MaterialTheme.colorScheme.secondary)
+                                Text("COMANDANTE", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(2f), color = MaterialTheme.colorScheme.primary)
+                                Text("WINS", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("RATIO", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("RACHA", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
-                            HorizontalDivider(color = ModernColors.primary.copy(alpha = 0.3f))
+                            HorizontalDivider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                             
                             leaderboard.forEach { entry ->
                                 Row(
                                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Text("#${entry.rank}", modifier = Modifier.weight(0.5f), color = ModernColors.secondary)
-                                    Text(entry.playerName, modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold, color = ModernColors.primary)
-                                    Text("${entry.gamesWon}", modifier = Modifier.weight(1f), color = ModernColors.textPrimary)
-                                    Text("${String.format("%.1f", entry.winRate)}%", modifier = Modifier.weight(1f), color = ModernColors.secondary)
-                                    Text("${entry.bestStreak}", modifier = Modifier.weight(1f), color = ModernColors.textPrimary)
+                                    Text("#${entry.rank}", modifier = Modifier.weight(0.5f), color = MaterialTheme.colorScheme.secondary)
+                                    Text(entry.playerName, modifier = Modifier.weight(2f), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                                    Text("${entry.gamesWon}", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
+                                    Text("${String.format("%.1f", entry.winRate)}%", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.secondary)
+                                    Text("${entry.bestStreak}", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
                                 }
                             }
                         }
@@ -179,7 +179,7 @@ fun StatsCard(
 ) {
     Card(
         modifier = modifier.border(1.dp, color.copy(alpha = 0.3f), RoundedCornerShape(8.dp)),
-        colors = CardDefaults.cardColors(containerColor = ModernColors.DeepAsh.copy(alpha = 0.4f))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
     ) {
         Column(Modifier.padding(16.dp)) {
             Text(
@@ -201,8 +201,8 @@ fun StatGridItem(label: String, value: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodySmall, color = ModernColors.textSecondary)
-        Text(text = value, style = MaterialTheme.typography.titleMedium, color = ModernColors.textPrimary, fontWeight = FontWeight.Bold)
+        Text(text = label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(text = value, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Bold)
     }
 }
 

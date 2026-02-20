@@ -32,8 +32,7 @@ fun MainMenuScreen(
         // Título
         Text(
             text = "HUNDIR LA FLOTA",
-            style = MaterialTheme.typography.displayLarge,
-            color = MaterialTheme.colorScheme.primary
+            style = MaterialTheme.typography.displayLarge
         )
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -157,9 +156,10 @@ fun ConnectionIndicator(connectionState: ConnectionState) {
     }
     
     Surface(
-        color = color.copy(alpha = 0.1f),
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier.padding(8.dp)
+        color = color.copy(alpha = 0.08f),
+        shape = RoundedCornerShape(4.dp),
+        modifier = Modifier.padding(8.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, color.copy(alpha = 0.2f))
     ) {
         Text(
             text = text,

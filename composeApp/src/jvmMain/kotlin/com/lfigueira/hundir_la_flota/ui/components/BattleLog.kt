@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,14 +36,14 @@ fun BattleLog(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
-            .background(ModernColors.DeepAsh.copy(alpha = 0.5f))
-            .border(1.dp, ModernColors.primary.copy(alpha = 0.2f), RoundedCornerShape(6.dp))
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
+            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f), RoundedCornerShape(6.dp))
             .padding(10.dp)
     ) {
         Text(
             "REGISTRO TÁCTICO",
-            style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
-            color = ModernColors.primary,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         

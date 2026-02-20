@@ -48,7 +48,7 @@ fun ShipPlacementScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(ModernColors.DeepAsh, ModernColors.SurfaceDark)))
+            .background(Brush.verticalGradient(listOf(MaterialTheme.colorScheme.background, MaterialTheme.colorScheme.surface)))
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             val isPortrait = maxWidth < maxHeight * 0.8f
@@ -62,21 +62,21 @@ fun ShipPlacementScreen(
                 Text(
                     "DESPLIEGUE ESTRATÉGICO",
                     style = MaterialTheme.typography.headlineSmall,
-                    color = ModernColors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 
                 if (notification?.startsWith("Error") == true) {
                     Text(
                         text = notification!!,
-                        color = ModernColors.error,
+                        color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 } else {
                     Text(
                         "POSICIONA TUS UNIDADES EN EL SECTOR TÁCTICO",
-                        color = ModernColors.textSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.labelSmall,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
@@ -168,7 +168,7 @@ fun InventoryPanel(
         Text(
             "RESERVAS DISPONIBLES",
             style = MaterialTheme.typography.labelSmall,
-            color = ModernColors.secondary
+            color = MaterialTheme.colorScheme.secondary
         )
         Spacer(modifier = Modifier.height(8.dp))
         
@@ -194,20 +194,20 @@ fun InventoryPanel(
                     onRotate(if (currentOrientation == Orientation.HORIZONTAL) 
                         Orientation.VERTICAL else Orientation.HORIZONTAL)
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = ModernColors.DeepAsh),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 modifier = Modifier.weight(0.4f).height(44.dp),
                 shape = RoundedCornerShape(4.dp),
                 contentPadding = PaddingValues(4.dp)
             ) {
-                Text(if(currentOrientation == Orientation.HORIZONTAL) "EJE: H" else "EJE: V", style = MaterialTheme.typography.labelSmall)
+                Text(if(currentOrientation == Orientation.HORIZONTAL) "EJE: H" else "EJE: V", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             
             Button(
                 onClick = { viewModel.confirmDeployment(placements) },
                 enabled = isFleetComplete,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFleetComplete) ModernColors.AmberGold else ModernColors.DeepAsh.copy(alpha = 0.5f),
-                    contentColor = if (isFleetComplete) Color.Black else ModernColors.textSecondary
+                    containerColor = if (isFleetComplete) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    contentColor = if (isFleetComplete) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 shape = RoundedCornerShape(4.dp),
                 modifier = Modifier.weight(0.6f).height(44.dp)
@@ -230,8 +230,8 @@ fun InventoryItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val borderColor by animateColorAsState(if (isSelected) ModernColors.primary else Color.Transparent)
-    val bgColor = if (isSelected) ModernColors.primary.copy(alpha = 0.15f) else ModernColors.DeepAsh.copy(alpha = 0.4f)
+    val borderColor by animateColorAsState(if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent)
+    val bgColor = if (isSelected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
 
     Row(
         modifier = Modifier
@@ -243,10 +243,10 @@ fun InventoryItem(
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val textColor = if (remaining > 0) ModernColors.textPrimary else ModernColors.textSecondary
+        val textColor = if (remaining > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
         Text("${type.name} [${type.size}S]", color = textColor, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), softWrap = false)
         Spacer(Modifier.width(8.dp))
-        Text("x$remaining", color = if (remaining > 0) ModernColors.secondary else ModernColors.textSecondary, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
+        Text("x$remaining", color = if (remaining > 0) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
     }
 }
 

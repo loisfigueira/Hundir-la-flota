@@ -40,8 +40,8 @@ fun SettingsScreen(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        ModernColors.backgroundDark,
-                        ModernColors.backgroundLight
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surface
                     )
                 )
             )
@@ -67,7 +67,7 @@ fun SettingsScreen(
                     .padding(bottom = 24.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = ModernColors.cardBackground
+                    containerColor = MaterialTheme.colorScheme.surface
                 ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
@@ -156,7 +156,8 @@ fun SettingsScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = ModernColors.error.copy(alpha = 0.8f)
+                        containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
+                        contentColor = MaterialTheme.colorScheme.onError
                     )
                 ) {
                     Text("DESCARTAR", fontWeight = FontWeight.Bold)
@@ -178,11 +179,23 @@ fun SettingsScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = ModernColors.primary
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Text("GUARDAR Y APLICAR", fontWeight = FontWeight.Bold)
                 }
+            }
+            Spacer(modifier = Modifier.height(24.dp)) // Add some space before the new button
+            Button(
+                onClick = { viewModel.findPvPMatch() },
+                modifier = Modifier
+                    .width(320.dp)
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("MATCHMAKING OPERATIVO (PvP)", color = MaterialTheme.colorScheme.onSecondary, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -197,7 +210,7 @@ private fun ConfigSection(
         Text(
             text = title.uppercase(),
             style = MaterialTheme.typography.titleMedium,
-            color = ModernColors.primary,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = 12.dp)
         )
         content()
@@ -216,7 +229,7 @@ private fun SliderWithValue(
         Text(
             text = label,
             style = MaterialTheme.typography.titleMedium,
-            color = ModernColors.textPrimary,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Slider(
@@ -225,9 +238,9 @@ private fun SliderWithValue(
             valueRange = valueRange,
             steps = steps,
             colors = SliderDefaults.colors(
-                thumbColor = ModernColors.primary,
-                activeTrackColor = ModernColors.primary,
-                inactiveTrackColor = ModernColors.primary.copy(alpha = 0.2f)
+                thumbColor = MaterialTheme.colorScheme.primary,
+                activeTrackColor = MaterialTheme.colorScheme.primary,
+                inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
             )
         )
     }
@@ -246,8 +259,8 @@ private fun RoundButton(
             .widthIn(min = 100.dp),
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) ModernColors.primary else ModernColors.DeepAsh,
-            contentColor = if (selected) Color.Black else ModernColors.textPrimary
+            containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
         ),
         elevation = ButtonDefaults.buttonElevation(if (selected) 4.dp else 0.dp)
     ) {
@@ -272,8 +285,8 @@ private fun RowScope.FleetButton(
             .weight(1f),
         shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) ModernColors.primary else ModernColors.DeepAsh,
-            contentColor = if (selected) Color.Black else ModernColors.textPrimary
+            containerColor = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
         ),
         elevation = ButtonDefaults.buttonElevation(if (selected) 4.dp else 0.dp)
     ) {
@@ -292,7 +305,7 @@ private fun FleetDetails(fleet: List<ShipDefinition>) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = ModernColors.DeepAsh.copy(alpha = 0.6f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {

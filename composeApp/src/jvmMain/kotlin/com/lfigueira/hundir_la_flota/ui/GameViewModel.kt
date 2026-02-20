@@ -409,7 +409,7 @@ class GameViewModel(
                     ShotResult.SUNK -> "¡Hundido! ${message.shipSunkType?.name}"
                 }
                 AppLogger.info("GameViewModel", "Resultado de mi ataque en (${message.pos.x}, ${message.pos.y}): $resultText")
-                addBattleEvent("Tú disparas a (${message.pos.x}, ${message.pos.y}): $resultText", if(message.result != ShotResult.MISS) ModernColors.primary else ModernColors.textSecondary)
+                addBattleEvent("Tú disparas a (${message.pos.x}, ${message.pos.y}): $resultText", if(message.result != ShotResult.MISS) ModernColors.primary else ModernColors.SlateSilver)
             }
             
             is GameMessage.Response.OpponentAttackResult -> {
@@ -419,13 +419,13 @@ class GameViewModel(
                     ShotResult.SUNK -> "hundió tu ${message.shipSunkType?.name}"
                 }
                 AppLogger.info("GameViewModel", "Ataque enemigo en (${message.pos.x}, ${message.pos.y}): $resultText")
-                addBattleEvent("Enemigo dispara a (${message.pos.x}, ${message.pos.y}) y $resultText", if(message.result != ShotResult.MISS) ModernColors.error else ModernColors.textSecondary)
+                addBattleEvent("Enemigo dispara a (${message.pos.x}, ${message.pos.y}) y $resultText", if(message.result != ShotResult.MISS) ModernColors.error else ModernColors.SlateSilver)
             }
             
             is GameMessage.Response.GameOver -> {
                 val isWinner = message.winnerId == myPlayerId
                 AppLogger.info("GameViewModel", "GameOver. Ganador: ${message.winnerId}. Soy ganador: $isWinner")
-                addBattleEvent(if (isWinner) "¡MISIÓN CUMPLIDA! VICTORIA" else "ERROR CRÍTICO: DERROTA", if(isWinner) ModernColors.WarmTeal else ModernColors.error)
+                addBattleEvent(if (isWinner) "¡MISIÓN CUMPLIDA! VICTORIA" else "ERROR CRÍTICO: DERROTA", if(isWinner) ModernColors.primary else ModernColors.error)
                 _uiState.value = UIState.GameOver(message)
             }
             

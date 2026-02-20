@@ -45,7 +45,7 @@ fun BattleScreen(viewModel: GameViewModel) {
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(ModernColors.DeepAsh, ModernColors.SurfaceDark)
+                    listOf(MaterialTheme.colorScheme.background, MaterialTheme.colorScheme.surface)
                 )
             )
     ) {
@@ -120,9 +120,9 @@ fun BattleScreen(viewModel: GameViewModel) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier
-                                        .background(ModernColors.SurfaceDark.copy(alpha = 0.8f))
+                                        .background(ModernColors.surface.copy(alpha = 0.9f))
                                         .padding(4.dp)
-                                        .border(1.dp, ModernColors.primary.copy(alpha = 0.4f))
+                                        .border(1.dp, MaterialTheme.colorScheme.outline)
                                 ) {
                                     BoardContainer(label = "MI SECTOR", size = minimapSize) {
                                         key(boardSize) {
@@ -147,8 +147,8 @@ fun BattleScreen(viewModel: GameViewModel) {
                 ) {
                     OutlinedButton(
                         onClick = { viewModel.endSession() },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ModernColors.error),
-                        border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(ModernColors.error, Color.Transparent)))
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                        border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(MaterialTheme.colorScheme.error, Color.Transparent)))
                     ) {
                         Text("ABORTAR MISIÓN", fontSize = 11.sp, softWrap = false)
                     }
@@ -178,8 +178,8 @@ fun TacticalHeader(
             )
             Text(
                 text = "SYSTEM: $status",
-                color = ModernColors.textSecondary,
-                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelSmall,
                 softWrap = false
             )
         }
@@ -188,8 +188,8 @@ fun TacticalHeader(
 
         // Amber Timer
         Card(
-            colors = CardDefaults.cardColors(containerColor = ModernColors.DeepAsh),
-            border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(ModernColors.primary.copy(alpha = 0.5f), Color.Transparent)))
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+            border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f), Color.Transparent)))
         ) {
              val timerColor = if (timeLeft < 10) ModernColors.error else ModernColors.secondary
              Text(
@@ -209,7 +209,7 @@ fun TacticalHeader(
 
         // Connection Status
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val dotColor = if (isConnected) ModernColors.WarmTeal else ModernColors.error
+            val dotColor = if (isConnected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
             Box(Modifier.size(8.dp).background(dotColor, shape = CircleShape))
             Spacer(Modifier.width(8.dp))
             Text(
@@ -229,9 +229,8 @@ fun BoardContainer(label: String, size: androidx.compose.ui.unit.Dp, content: @C
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = Color.White.copy(alpha = 0.5f),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 4.dp),
-            fontSize = 10.sp,
             softWrap = false
         )
         Box(

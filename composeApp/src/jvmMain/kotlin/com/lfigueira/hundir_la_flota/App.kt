@@ -131,7 +131,7 @@ fun MatchmakingScreen(viewModel: GameViewModel) {
     ) {
         CircularProgressIndicator(modifier = Modifier.size(64.dp))
         Spacer(modifier = Modifier.height(24.dp))
-        Text("Buscando partida...", style = MaterialTheme.typography.headlineMedium)
+        Text("Buscando partida...", style = MaterialTheme.typography.headlineLarge)
         Spacer(modifier = Modifier.height(32.dp))
         OutlinedButton(onClick = { viewModel.cancelMatchmaking() }) {
             Text("Cancelar")
@@ -153,7 +153,7 @@ fun GameOverScreen(
         Text(
             text = if (isWinner) "¡VICTORIA!" else "DERROTA", 
             style = MaterialTheme.typography.displayLarge,
-            color = if (isWinner) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+            color = if (isWinner) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
         )
         Spacer(Modifier.height(16.dp))
         Text("Ganador: ${result.winnerId}", style = MaterialTheme.typography.headlineMedium)

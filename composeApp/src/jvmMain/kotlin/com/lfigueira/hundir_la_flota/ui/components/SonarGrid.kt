@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,15 +34,15 @@ fun SonarGrid(
     onCellClick: (Coordinate) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val accentColor = if (isRadar) ModernColors.AmberGold else ModernColors.WarmTeal
+    val accentColor = if (isRadar) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
     val boardSize = boardState.size
     
     // Contenedor principal
     BoxWithConstraints(
         modifier = modifier
             .aspectRatio(1f)
-            .border(1.dp, accentColor.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
-            .background(ModernColors.DeepAsh)
+            .border(1.dp, accentColor.copy(alpha = 0.2f), RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colorScheme.surface)
             .padding(1.dp)
     ) {
         // Cálculo de celda dinámico - FUERZA EL TAMAÑO SEGÚN EL ANCHO DISPONIBLE
@@ -171,8 +172,8 @@ fun SonarCell(
             CellState.HIT -> {
                 Box(
                     Modifier.fillMaxSize()
-                        .background(ModernColors.SunsetOrange.copy(alpha = 0.15f * blinkAlpha))
-                        .border(1.dp, ModernColors.AmberGold.copy(alpha = 0.4f * blinkAlpha))
+                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.15f * blinkAlpha))
+                        .border(1.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.4f * blinkAlpha))
                 )
                 Image(
                     painter = painterResource(Res.drawable.hit_marker),
@@ -196,9 +197,10 @@ fun SonarCell(
                         repeatMode = RepeatMode.Restart
                     )
                 )
+                val rippleColor = MaterialTheme.colorScheme.primary
                 Canvas(modifier = Modifier.fillMaxSize(0.7f * iconScale)) {
                     drawCircle(
-                        color = ModernColors.primary.copy(alpha = 0.4f * (1f - rippleScale)),
+                        color = rippleColor.copy(alpha = 0.4f * (1f - rippleScale)),
                         radius = (size.minDimension / 2) * rippleScale,
                         style = Stroke(width = (size.minDimension / 20))
                     )
@@ -214,11 +216,11 @@ fun SonarCell(
                             Modifier.fillMaxSize(0.85f * iconScale)
                                 .background(
                                     Brush.linearGradient(
-                                        listOf(ModernColors.WarmTeal.copy(alpha = 0.8f), ModernColors.WarmTeal, ModernColors.WarmTeal.copy(alpha = 0.8f))
+                                        listOf(MaterialTheme.colorScheme.primary.copy(alpha = 0.8f), MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primary.copy(alpha = 0.8f))
                                     ),
                                     shape = RoundedCornerShape(2.dp)
                                 )
-                                .border(1.dp, ModernColors.SoftWhite.copy(alpha = 0.2f), RoundedCornerShape(2.dp))
+                                .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f), RoundedCornerShape(2.dp))
                                 .graphicsLayer {
                                     shadowElevation = 4f
                                     clip = true

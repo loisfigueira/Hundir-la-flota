@@ -32,7 +32,7 @@ fun LobbyScreen(
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(ModernColors.backgroundDark, ModernColors.backgroundLight)
+                    listOf(MaterialTheme.colorScheme.background, MaterialTheme.colorScheme.surface)
                 )
             ),
         contentAlignment = Alignment.Center
@@ -41,9 +41,9 @@ fun LobbyScreen(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .fillMaxHeight(0.85f),
-            colors = CardDefaults.cardColors(containerColor = ModernColors.cardBackground.copy(alpha = 0.9f)),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)),
             shape = RoundedCornerShape(12.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, ModernColors.primary.copy(alpha = 0.3f))
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
         ) {
             Column(
                 modifier = Modifier.padding(24.dp).fillMaxSize(),
@@ -53,7 +53,7 @@ fun LobbyScreen(
                 Text(
                     text = if (lobbyState.roomCode != null) "SALA ESTRATÉGICA" else "CENTRAL DE RECLUTAMIENTO",
                     style = MaterialTheme.typography.headlineSmall,
-                    color = ModernColors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
                 )
@@ -64,7 +64,7 @@ fun LobbyScreen(
                     Text(
                         text = "ID SALA: ${lobbyState.roomCode}",
                         style = MaterialTheme.typography.headlineMedium,
-                        color = ModernColors.secondary,
+                        color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 2.sp
                     )
@@ -104,7 +104,7 @@ fun LobbyScreen(
                 Text(
                     text = "RECLUTAS EN POSICIÓN (${lobbyState.players.size}/${lobbyState.maxPlayers})",
                     style = MaterialTheme.typography.labelMedium,
-                    color = ModernColors.textSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 
                 Spacer(Modifier.height(16.dp))
@@ -123,19 +123,19 @@ fun LobbyScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(50.dp)
-                                    .background(Color.White.copy(alpha = 0.05f), RoundedCornerShape(8.dp)),
+                                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f), RoundedCornerShape(8.dp)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(24.dp),
-                                    color = ModernColors.primary,
+                                    color = MaterialTheme.colorScheme.primary,
                                     strokeWidth = 2.dp
                                 )
                                 Spacer(Modifier.width(12.dp))
                                 Text(
                                     text = "Buscando enlace...",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = ModernColors.primary
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                         }
@@ -146,11 +146,11 @@ fun LobbyScreen(
                 
                 Button(
                     onClick = { viewModel.cancelMatchmaking() },
-                    colors = ButtonDefaults.buttonColors(containerColor = ModernColors.error.copy(alpha = 0.7f)),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)),
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.fillMaxWidth().height(48.dp)
                 ) {
-                    Text("ABORTAR OPERACIÓN", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("ABORTAR OPERACIÓN", color = MaterialTheme.colorScheme.onError, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -162,16 +162,16 @@ fun PlayerLobbyItem(name: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ModernColors.primary.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f), RoundedCornerShape(6.dp))
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .size(10.dp)
-                .background(ModernColors.primary, androidx.compose.foundation.shape.CircleShape)
+                .background(MaterialTheme.colorScheme.primary, androidx.compose.foundation.shape.CircleShape)
         )
         Spacer(Modifier.width(16.dp))
-        Text(name, color = ModernColors.textPrimary, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium)
+        Text(name, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium)
     }
 }
