@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lfigueira.hundir_la_flota.common.AppLogger
 import com.lfigueira.hundir_la_flota.common.client.ConnectionState
+import com.lfigueira.hundir_la_flota.common.client.IGameClient
 import com.lfigueira.hundir_la_flota.common.client.GameClient
 import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.protocol.*
@@ -17,7 +18,7 @@ import androidx.compose.ui.graphics.Color
  * Integra el GameClient con la UI de Compose usando Flows reactivos.
  */
 class GameViewModel(
-    private val gameClient: GameClient = GameClient()
+    private val gameClient: IGameClient = GameClient()
 ) : ViewModel() {
     
     // Estado de conexión (expuesto desde el cliente)

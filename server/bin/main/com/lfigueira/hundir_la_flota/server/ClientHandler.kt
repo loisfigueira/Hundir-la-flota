@@ -13,16 +13,27 @@ import java.net.SocketException
 import java.util.UUID
 
 /**
+ * Interfaz para el manejo de comunicación con un cliente.
+ * Permite mockear la comunicación en tests.
+ */
+interface IClientHandler {
+    val clientId: String
+    val playerName: String
+    suspend fun sendMessage(message: GameMessage)
+    fun disconnect()
+}
+
+/**
  * Maneja la comunicación con un cliente individual.
  * Versión simplificada: Line-based JSON, Scanner, Robust Loop.
  */
 class ClientHandler(
-    private val socket: Socket,
+    private val socket: java.net.Socket,
     private val server: GameServer,
     private val scope: CoroutineScope
-) {
-    val clientId: String = UUID.randomUUID().toString()
-    var playerName: String = "Unknown"
+) : IClientHandler {
+    override val clientId: String = UUID.randomUUID().toString()
+    override var playerName: String = "Unknown"
         private set
     
     // Using standard Java I/O as requested
@@ -199,7 +210,7 @@ class ClientHandler(
     /**
      * Envía un mensaje al cliente.
      */
-    suspend fun sendMessage(message: GameMessage) {
+    override suspend fun sendMessage(message: GameMessage) {
         try {
             val jsonString = json.encodeToString(message)
             AppLogger.debug("ClientHandler", "[ClientHandler-$clientId] >>> ENVIANDO: $jsonString")
@@ -215,7 +226,7 @@ class ClientHandler(
     /**
      * Desconecta al cliente.
      */
-    fun disconnect() {
+    override fun disconnect() {
         if (!isConnected) {
             AppLogger.debug("ClientHandler", "[ClientHandler-$clientId] Intento de desconexión pero ya estaba desconectado.")
             return

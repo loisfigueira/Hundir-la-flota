@@ -3,7 +3,7 @@ package com.lfigueira.hundir_la_flota.server.logic
 import com.lfigueira.hundir_la_flota.common.AppLogger
 import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.protocol.GameMessage
-import com.lfigueira.hundir_la_flota.server.ClientHandler
+import com.lfigueira.hundir_la_flota.server.IClientHandler
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.security.SecureRandom
@@ -13,9 +13,9 @@ import java.util.concurrent.ConcurrentHashMap
 data class Room(
     val id: String,
     val code: String,
-    val host: ClientHandler,
+    val host: IClientHandler,
     val config: GameConfig,
-    val players: MutableList<ClientHandler> = mutableListOf()
+    val players: MutableList<IClientHandler> = mutableListOf()
 )
 
 class RoomManager(private val gameLogic: GameLogic) {
@@ -28,7 +28,7 @@ class RoomManager(private val gameLogic: GameLogic) {
     /**
      * Crea una sala privada.
      */
-    suspend fun createRoom(host: ClientHandler, config: GameConfig) {
+    suspend fun createRoom(host: IClientHandler, config: GameConfig) {
         mutex.withLock {
             val roomId = UUID.randomUUID().toString()
             val code = generateUniqueCode()
@@ -54,7 +54,7 @@ class RoomManager(private val gameLogic: GameLogic) {
     /**
      * Intenta unir a un jugador a una sala mediante código.
      */
-    suspend fun joinRoom(client: ClientHandler, code: String) {
+    suspend fun joinRoom(client: IClientHandler, code: String) {
         mutex.withLock {
             val roomId = roomCodes[code?.uppercase()]
             if (roomId == null) {
@@ -90,7 +90,7 @@ class RoomManager(private val gameLogic: GameLogic) {
     /**
      * Maneja desconexión.
      */
-    suspend fun handleDisconnect(client: ClientHandler) {
+    suspend fun handleDisconnect(client: IClientHandler) {
         mutex.withLock {
             val room = rooms.values.find { it.players.contains(client) } ?: return
             

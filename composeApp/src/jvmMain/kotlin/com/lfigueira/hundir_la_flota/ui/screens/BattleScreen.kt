@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.common.protocol.*
+import com.lfigueira.hundir_la_flota.common.client.ConnectionState
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
 import com.lfigueira.hundir_la_flota.ui.components.BattleLog
 import com.lfigueira.hundir_la_flota.ui.components.SonarGrid

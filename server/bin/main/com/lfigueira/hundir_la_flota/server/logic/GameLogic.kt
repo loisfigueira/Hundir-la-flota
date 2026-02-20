@@ -3,7 +3,7 @@ package com.lfigueira.hundir_la_flota.server.logic
 import com.lfigueira.hundir_la_flota.common.AppLogger
 import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.protocol.*
-import com.lfigueira.hundir_la_flota.server.ClientHandler
+import com.lfigueira.hundir_la_flota.server.IClientHandler
 import com.lfigueira.hundir_la_flota.server.game.GameSession
 import com.lfigueira.hundir_la_flota.server.persistence.RecordsManager
 import kotlinx.coroutines.sync.Mutex
@@ -26,7 +26,7 @@ class GameLogic(private val recordsManager: RecordsManager) {
      * Busca una partida para el cliente (ahora delega al LobbyManager).
      */
     suspend fun findMatch(
-        client: ClientHandler,
+        client: IClientHandler,
         config: GameConfig,
         isPvE: Boolean,
         difficulty: AIDifficulty = AIDifficulty.MEDIUM
@@ -87,28 +87,28 @@ class GameLogic(private val recordsManager: RecordsManager) {
     /**
      * Cancela la búsqueda de partida (salir del Lobby).
      */
-    suspend fun cancelSearch(client: ClientHandler) {
+    suspend fun cancelSearch(client: IClientHandler) {
         lobbyManager.handleDisconnect(client)
     }
 
     /**
      * Crea una sala privada.
      */
-    suspend fun createRoom(client: ClientHandler, config: GameConfig) {
+    suspend fun createRoom(client: IClientHandler, config: GameConfig) {
         roomManager.createRoom(client, config)
     }
 
     /**
      * Se une a una sala privada.
      */
-    suspend fun joinRoom(client: ClientHandler, code: String) {
+    suspend fun joinRoom(client: IClientHandler, code: String) {
         roomManager.joinRoom(client, code)
     }
 
     /**
      * Delega acciones de juego a la GameSession correspondiente.
      */
-    suspend fun handleGameAction(client: ClientHandler, action: GameMessage.Action) {
+    suspend fun handleGameAction(client: IClientHandler, action: GameMessage.Action) {
         // StartGamePVE legacy ya no se usa directamente, todo va por findMatch
         if (action is GameMessage.Action.StartGamePVE) {
             findMatch(client, action.config, true, action.difficulty)
@@ -126,7 +126,7 @@ class GameLogic(private val recordsManager: RecordsManager) {
     /**
      * Maneja la desconexión de un cliente.
      */
-    suspend fun handleDisconnect(client: ClientHandler) {
+    suspend fun handleDisconnect(client: IClientHandler) {
         // 1. Si está en Lobby, removerlo
         lobbyManager.handleDisconnect(client)
         roomManager.handleDisconnect(client)
@@ -142,7 +142,7 @@ class GameLogic(private val recordsManager: RecordsManager) {
     /**
      * Encuentra la partida de un cliente.
      */
-    private fun findGameByClient(client: ClientHandler): GameSession? {
+    private fun findGameByClient(client: IClientHandler): GameSession? {
         return activeGames.values.firstOrNull { 
             it.player1 == client || it.player2 == client 
         }
@@ -155,7 +155,7 @@ class GameLogic(private val recordsManager: RecordsManager) {
     /**
      * Llamado cuando un jugador completa la conexión (Handshake).
      */
-    suspend fun onPlayerConnected(client: ClientHandler) {
+    suspend fun onPlayerConnected(client: IClientHandler) {
         // 1. Asegurar que tenga records (Crear si es nuevo)
         val stats = recordsManager.ensurePlayerStats(client.playerName)
         

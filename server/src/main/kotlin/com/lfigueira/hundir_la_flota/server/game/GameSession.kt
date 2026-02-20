@@ -3,7 +3,7 @@ package com.lfigueira.hundir_la_flota.server.game
 import com.lfigueira.hundir_la_flota.common.AppLogger
 import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.protocol.*
-import com.lfigueira.hundir_la_flota.server.ClientHandler
+import com.lfigueira.hundir_la_flota.server.IClientHandler
 import com.lfigueira.hundir_la_flota.server.persistence.RecordsManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
@@ -15,8 +15,8 @@ import kotlinx.coroutines.sync.withLock
  */
 class GameSession(
     val gameId: String,
-    val player1: ClientHandler, // En PvE, este es el humano
-    val player2: ClientHandler? = null, // En PvE es null
+    val player1: IClientHandler, // En PvE, este es el humano
+    val player2: IClientHandler? = null, // En PvE es null
     val isPvE: Boolean = false,
     val difficulty: AIDifficulty = AIDifficulty.MEDIUM,
     val config: GameConfig = GameConfig(), // Configuración dinámica del juego
@@ -88,7 +88,7 @@ class GameSession(
         }
     }
 
-    private fun createGameStateMessage(forPlayer: ClientHandler): GameMessage.Response.GameState {
+    private fun createGameStateMessage(forPlayer: IClientHandler): GameMessage.Response.GameState {
         val isP1 = forPlayer == player1
         val myShips = if (isP1) player1Ships else player2Ships
         val oppShots = if (isP1) player1ReceivedShots else player2ReceivedShots
@@ -135,7 +135,7 @@ class GameSession(
     /**
      * Procesa una acción recibida de un jugador.
      */
-    suspend fun handleAction(player: ClientHandler, action: GameMessage.Action) {
+    suspend fun handleAction(player: IClientHandler, action: GameMessage.Action) {
         // En fase de colocación (!isGameRunning), solo permitimos colocar barcos, confirmar despliegue o rendirse.
         if (!isGameRunning && action !is GameMessage.Action.PlaceShips && 
             action !is GameMessage.Action.ConfirmDeployment && action !is GameMessage.Action.Surrender) {
@@ -157,7 +157,7 @@ class GameSession(
         }
     }
     
-    private suspend fun handlePlaceShips(player: ClientHandler, ships: List<ShipPlacement>) {
+    private suspend fun handlePlaceShips(player: IClientHandler, ships: List<ShipPlacement>) {
         AppLogger.debug("GameSession", "[GameSession-$gameId] ${player.playerName} intenta colocar barcos.")
         gameStateMutex.withLock {
             if (player == player1 && p1Ready) {
@@ -216,7 +216,7 @@ class GameSession(
     }
 
     
-    private suspend fun handleAttack(player: ClientHandler?, coordinate: Coordinate) {
+    private suspend fun handleAttack(player: IClientHandler?, coordinate: Coordinate) {
         gameStateMutex.withLock {
             if (!isGameRunning) return
             
@@ -434,7 +434,7 @@ class GameSession(
      * Maneja el abandono voluntario de la partida.
      * El jugador que abandona pierde y el oponente gana automáticamente.
      */
-    private fun handleLeaveGame(player: ClientHandler) {
+    private fun handleLeaveGame(player: IClientHandler) {
         val leaver = player
         val opponent = if (leaver == player1) player2 else player1
         
@@ -491,12 +491,12 @@ class GameSession(
         }
     }
 
-    private suspend fun handleSurrender(player: ClientHandler) {
+    private suspend fun handleSurrender(player: IClientHandler) {
         val winner = if (player == player1) player2 else player1
         finishGame(winner, GameOverReason.SURRENDER)
     }
     
-    private suspend fun finishGame(winner: ClientHandler?, reason: GameOverReason = GameOverReason.ALL_SHIPS_SUNK) {
+    private suspend fun finishGame(winner: IClientHandler?, reason: GameOverReason = GameOverReason.ALL_SHIPS_SUNK) {
         val winnerName = winner?.playerName ?: botName
         val winnerId = winner?.clientId ?: botId
         AppLogger.info("GameSession", "[GameSession-$gameId] Ronda $currentRound finalizada. Ganador: $winnerName. Razón: $reason")

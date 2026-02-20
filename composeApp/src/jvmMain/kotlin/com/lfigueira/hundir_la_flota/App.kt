@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.lfigueira.hundir_la_flota.common.client.GameClient
+import com.lfigueira.hundir_la_flota.common.client.ConnectionState
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
 import com.lfigueira.hundir_la_flota.ui.UIState
 import com.lfigueira.hundir_la_flota.ui.screens.MainMenuScreen

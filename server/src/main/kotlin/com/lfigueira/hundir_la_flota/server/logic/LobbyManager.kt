@@ -4,7 +4,7 @@ import com.lfigueira.hundir_la_flota.common.AppLogger
 import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.protocol.AIDifficulty
 import com.lfigueira.hundir_la_flota.common.protocol.GameMessage
-import com.lfigueira.hundir_la_flota.server.ClientHandler
+import com.lfigueira.hundir_la_flota.server.IClientHandler
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.UUID
@@ -15,7 +15,7 @@ data class Lobby(
     val config: GameConfig,
     val isPvE: Boolean,
     val difficulty: AIDifficulty = AIDifficulty.MEDIUM,
-    val players: MutableList<ClientHandler> = mutableListOf()
+    val players: MutableList<IClientHandler> = mutableListOf()
 ) {
     val maxPlayers = 2
 }
@@ -27,7 +27,7 @@ class LobbyManager(private val gameLogic: GameLogic) {
     /**
      * Procesa la solicitud a una sala (PvP o PvE).
      */
-    suspend fun joinLobby(client: ClientHandler, config: GameConfig, isPvE: Boolean, difficulty: AIDifficulty = AIDifficulty.MEDIUM) {
+    suspend fun joinLobby(client: IClientHandler, config: GameConfig, isPvE: Boolean, difficulty: AIDifficulty = AIDifficulty.MEDIUM) {
         mutex.withLock {
             if (isPvE) {
                 createPvELobby(client, config, difficulty)
@@ -37,7 +37,7 @@ class LobbyManager(private val gameLogic: GameLogic) {
         }
     }
 
-    private suspend fun createPvELobby(client: ClientHandler, config: GameConfig, difficulty: AIDifficulty) {
+    private suspend fun createPvELobby(client: IClientHandler, config: GameConfig, difficulty: AIDifficulty) {
         val lobbyId = UUID.randomUUID().toString()
         val lobby = Lobby(lobbyId, config, isPvE = true, difficulty = difficulty)
         lobby.players.add(client)
@@ -50,7 +50,7 @@ class LobbyManager(private val gameLogic: GameLogic) {
         lobbies.remove(lobbyId)
     }
 
-    private suspend fun joinOrCreatePvPLobby(client: ClientHandler, config: GameConfig) {
+    private suspend fun joinOrCreatePvPLobby(client: IClientHandler, config: GameConfig) {
         // Buscar sala PvP con hueco y configuración compatible (por ahora solo miramos hueco)
         // Podríamos filtrar por boardSize si quisiéramos matchmaking estricto
         val availableLobby = lobbies.values.find { !it.isPvE && it.players.size < it.maxPlayers }
@@ -93,7 +93,7 @@ class LobbyManager(private val gameLogic: GameLogic) {
     /**
      * Maneja la desconexión de un jugador en fase de Lobby.
      */
-    suspend fun handleDisconnect(client: ClientHandler) {
+    suspend fun handleDisconnect(client: IClientHandler) {
         mutex.withLock {
             val lobby = lobbies.values.find { it.players.contains(client) } ?: return
             

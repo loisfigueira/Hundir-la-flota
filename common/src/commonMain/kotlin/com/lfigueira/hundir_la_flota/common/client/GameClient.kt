@@ -14,10 +14,22 @@ import kotlinx.serialization.json.Json
 import kotlin.math.min
 
 /**
+ * Interfaz para el cliente de juego.
+ * Permite mockear la comunicación en tests de ViewModel.
+ */
+interface IGameClient {
+    val connectionState: StateFlow<ConnectionState>
+    val incomingMessages: SharedFlow<GameMessage>
+    suspend fun connectAndInitialize(host: String, port: Int, playerName: String): Boolean
+    suspend fun send(message: GameMessage)
+    suspend fun disconnect()
+}
+
+/**
  * Cliente de juego con lógica de negocio compartida.
  * Maneja el ciclo de vida, reconexión y estado.
  */
-class GameClient {
+class GameClient : IGameClient {
     private val networkClient = NetworkClient()
     private val scope = CoroutineScope(Dispatchers.Default)
     
@@ -28,10 +40,10 @@ class GameClient {
     
     // Estados internos
     private val _connectionState = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
-    val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
+    override val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
     
     private val _incomingMessages = MutableSharedFlow<GameMessage>(extraBufferCapacity = 64)
-    val incomingMessages: SharedFlow<GameMessage> = _incomingMessages.asSharedFlow()
+    override val incomingMessages: SharedFlow<GameMessage> = _incomingMessages.asSharedFlow()
     
     private var keepAliveJob: Job? = null
     private var messageCollectionJob: Job? = null
@@ -45,7 +57,7 @@ class GameClient {
      * Inicia la conexión, handshake y descarga de records.
      * @return True si la inicialización fue exitosa (se recibieron records), False en caso contrario.
      */
-    suspend fun connectAndInitialize(host: String, port: Int, playerName: String): Boolean {
+    override suspend fun connectAndInitialize(host: String, port: Int, playerName: String): Boolean {
         currentHost = host
         currentPort = port
         currentPlayerName = playerName
@@ -132,7 +144,7 @@ class GameClient {
         }
     }
     
-    suspend fun send(message: GameMessage) {
+    override suspend fun send(message: GameMessage) {
         try {
             val jsonString = json.encodeToString(GameMessage.serializer(), message)
             AppLogger.debug("GameClient", ">>> ENVIANDO: $jsonString")
@@ -142,7 +154,7 @@ class GameClient {
         }
     }
     
-    suspend fun disconnect() {
+    override suspend fun disconnect() {
         AppLogger.info("GameClient", "Desconectando...")
         try {
             send(GameMessage.Connection.Disconnect())
