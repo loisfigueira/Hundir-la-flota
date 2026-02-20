@@ -27,6 +27,14 @@ import com.lfigueira.hundir_la_flota.generated.resources.hit_marker
 import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import org.jetbrains.compose.resources.painterResource
 
+/**
+ * Componente principal para representar el tablero de juego (Radar o Flota).
+ * Gestiona el dibujado de la rejilla, los efectos de barrido de sonar y los disparos.
+ * @param boardState Estado actual de las celdas y barcos del tablero.
+ * @param isRadar True si es el radar enemigo (oculta barcos, permite clicks).
+ * @param onCellClick Callback disparado al pulsar una celda.
+ * @param modifier Modificador de diseño para el contenedor.
+ */
 @Composable
 fun SonarGrid(
     boardState: BoardState,
@@ -123,6 +131,18 @@ fun SonarGrid(
     }
 }
 
+/**
+ * Celda individual de la rejilla del sonar.
+ * Renderiza el estado de la celda (agua, tocado, hundido) y fragmentos de barcos si es el tablero propio.
+ * @param coord Coordenadas lógicas (x, y).
+ * @param state Estado de ocupación/daño de la celda.
+ * @param isRadar Indica si la celda pertenece al radar ofensivo.
+ * @param accentColor Color temático para efectos visuales.
+ * @param ships Lista de barcos (solo para tablero propio).
+ * @param onClick Acción al pulsar la celda.
+ * @param fontSize Tamaño de fuente para las coordenadas de depuración.
+ * @param iconScale Escala para los marcadores de impacto.
+ */
 @Composable
 fun SonarCell(
     coord: Coordinate,

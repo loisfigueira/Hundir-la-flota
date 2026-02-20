@@ -10,6 +10,9 @@ import kotlinx.coroutines.sync.withLock
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Representa una sala de espera antes de iniciar una partida.
+ */
 data class Lobby(
     val id: String,
     val config: GameConfig,
@@ -17,15 +20,22 @@ data class Lobby(
     val difficulty: AIDifficulty = AIDifficulty.MEDIUM,
     val players: MutableList<IClientHandler> = mutableListOf()
 ) {
+    /** Número máximo de jugadores permitidos en un lobby PvP. */
     val maxPlayers = 2
 }
 
 class LobbyManager(private val gameLogic: GameLogic) {
+    /** Mapa de lobbies activos indexados por su ID único. */
     private val lobbies = ConcurrentHashMap<String, Lobby>()
+    /** Mutex para sincronizar el acceso a las listas de jugadores en los lobbies. */
     private val mutex = Mutex()
 
     /**
-     * Procesa la solicitud a una sala (PvP o PvE).
+     * Procesa la solicitud de un cliente para unirse a una cola de emparejamiento.
+     * @param client El cliente que desea jugar.
+     * @param config Configuración de partida preferida.
+     * @param isPvE True si desea jugar contra la IA.
+     * @param difficulty Dificultad de la IA (solo si isPvE es true).
      */
     suspend fun joinLobby(client: IClientHandler, config: GameConfig, isPvE: Boolean, difficulty: AIDifficulty = AIDifficulty.MEDIUM) {
         mutex.withLock {

@@ -18,6 +18,12 @@ import com.lfigueira.hundir_la_flota.common.protocol.PlayerStats
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
 import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
+/**
+ * Pantalla que muestra el historial de partidas, estadísticas personales y el ranking global.
+ * @param viewModel ViewModel para gestionar la navegación de regreso.
+ * @param playerStats Estadísticas detalladas del perfil del jugador actual.
+ * @param leaderboard Lista de los mejores jugadores registrados en el servidor.
+ */
 @Composable
 fun RecordsScreen(
     viewModel: GameViewModel,
@@ -170,6 +176,12 @@ fun RecordsScreen(
     }
 }
 
+/**
+ * Tarjeta estilizada para agrupar métricas relacionadas.
+ * @param title Título de la sección de estadísticas.
+ * @param color Color temático para el borde y el título.
+ * @param content Bloque composable con los ítems de estadística.
+ */
 @Composable
 fun StatsCard(
     title: String,

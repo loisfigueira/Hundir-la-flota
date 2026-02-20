@@ -16,9 +16,11 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class GameLogic(private val recordsManager: RecordsManager) {
     
+    /** Partidas activas actualmente indexadas por su ID. */
     private val activeGames = ConcurrentHashMap<String, GameSession>()
-    // Reemplazamos matchmakingQueue con LobbyManager
+    /** Gestor de colas de emparejamiento. */
     private val lobbyManager = LobbyManager(this)
+    /** Gestor de salas privadas. */
     private val roomManager = RoomManager(this)
 
     
@@ -93,13 +95,17 @@ class GameLogic(private val recordsManager: RecordsManager) {
 
     /**
      * Crea una sala privada.
+     * @param client El jugador que crea la sala.
+     * @param config Configuración inicial de la partida para la sala.
      */
     suspend fun createRoom(client: IClientHandler, config: GameConfig) {
         roomManager.createRoom(client, config)
     }
 
     /**
-     * Se une a una sala privada.
+     * Se une a una sala privada mediante un código.
+     * @param client El jugador que desea unirse.
+     * @param code Código alfanumérico de la sala.
      */
     suspend fun joinRoom(client: IClientHandler, code: String) {
         roomManager.joinRoom(client, code)
@@ -124,7 +130,8 @@ class GameLogic(private val recordsManager: RecordsManager) {
     }
     
     /**
-     * Maneja la desconexión de un cliente.
+     * Maneja la desconexión de un cliente, limpiando lobbies y notificando en partidas activas.
+     * @param client El cliente desconectado.
      */
     suspend fun handleDisconnect(client: IClientHandler) {
         // 1. Si está en Lobby, removerlo
@@ -148,6 +155,10 @@ class GameLogic(private val recordsManager: RecordsManager) {
         }
     }
     
+    /**
+     * Elimina una partida de la lista de partidas activas.
+     * @param gameId ID de la partida a eliminar.
+     */
     fun removeGame(gameId: String) {
         activeGames.remove(gameId)
     }

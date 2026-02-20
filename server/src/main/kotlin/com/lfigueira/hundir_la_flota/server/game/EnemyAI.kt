@@ -14,6 +14,11 @@ class EnemyAI(val difficulty: AIDifficulty = AIDifficulty.MEDIUM) {
     private val random = Random()
     private val pendingTargets = Stack<Coordinate>() 
     
+    /**
+     * Calcula la siguiente coordenada a la que disparará la IA.
+     * @param alreadyFired Lista de coordenadas a las que ya se ha disparado en este tablero.
+     * @return La coordenada elegida para el siguiente ataque.
+     */
     fun getNextShot(alreadyFired: List<Coordinate>): Coordinate {
         // En dificultad EASY, ignoramos la caza de adyacentes y disparamos al azar
         if (difficulty == AIDifficulty.EASY) {
@@ -64,6 +69,12 @@ class EnemyAI(val difficulty: AIDifficulty = AIDifficulty.MEDIUM) {
         return generateRandomShot(alreadyFired)
     }
     
+    /**
+     * Informa a la IA del resultado del último disparo para que pueda aprender/ajustar su estrategia.
+     * @param result Resultado del disparo (AGUA, TOCADO, HUNDIDO).
+     * @param coordinate Coordenada del disparo.
+     * @param isSunk Indica si el disparo ha terminado de hundir un barco.
+     */
     fun notifyShotResult(result: ShotResult, coordinate: Coordinate, isSunk: Boolean) {
         if (difficulty == AIDifficulty.EASY) return // No aprende en fácil
 

@@ -20,14 +20,16 @@ import java.util.UUID
 class GameServer(private val configPath: String = "server.properties") {
     
     private val config = loadConfig(configPath)
+    /** Gestor de persistencia de estadísticas y récords. */
     private val recordsManager = RecordsManager(config["server.records_file"] ?: "records.json")
+    /** Lista de clientes conectados actualmente. */
     private val clients = Collections.synchronizedList(mutableListOf<ClientHandler>())
     
     // Scope con SupervisorJob para que el fallo de un cliente no afecte a otros
+    /** Scope de coroutines para el servidor. */
     private val serverScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     
-    // Componentes del servidor
-    // Componentes del servidor
+    /** Motor de lógica de juego y emparejamiento. */
     val gameLogic = GameLogic(recordsManager)
     
     private lateinit var serverSocket: ServerSocket
@@ -135,12 +137,20 @@ class GameServer(private val configPath: String = "server.properties") {
         }
     }
     
+    /**
+     * Elimina un cliente de la lista de conexiones activas.
+     * @param client El gestor del cliente a eliminar.
+     */
     fun removeClient(client: ClientHandler) {
         clients.remove(client)
     }
     
+    /** @return El gestor de récords del servidor. */
     fun getRecordsManager() = recordsManager
     
+    /**
+     * Detiene el servidor de forma segura, cerrando todos los sockets y cancelando tareas.
+     */
     fun stop() {
         isRunning = false
         try {
@@ -157,6 +167,9 @@ class GameServer(private val configPath: String = "server.properties") {
         AppLogger.info("GameServer", "Servidor detenido")
     }
     
+    /**
+     * @return Una cadena con estadísticas básicas del servidor.
+     */
     fun getStats(): String {
         return """
             Estado: ${if(isRunning) "Online" else "Offline"}

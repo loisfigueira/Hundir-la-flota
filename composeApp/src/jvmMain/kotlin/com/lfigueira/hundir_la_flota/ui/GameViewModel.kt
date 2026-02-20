@@ -22,33 +22,41 @@ class GameViewModel(
 ) : ViewModel() {
     
     // Estado de conexión (expuesto desde el cliente)
+    /** Estado reactivo de la conexión con el servidor. */
     val connectionState: StateFlow<ConnectionState> = gameClient.connectionState
     
     // Estado de la UI
+    /** Pantalla actual que debe mostrarse en la aplicación. */
     private val _uiState = MutableStateFlow<UIState>(UIState.MainMenu)
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
     
     // Estadísticas del jugador
+    /** Perfil del jugador actual cargado del servidor. */
     private val _playerStats = MutableStateFlow<PlayerStats?>(null)
     val playerStats: StateFlow<PlayerStats?> = _playerStats.asStateFlow()
     
     // Leaderboard
+    /** Ranking global de jugadores. */
     private val _leaderboard = MutableStateFlow<List<LeaderboardEntry>>(emptyList())
     val leaderboard: StateFlow<List<LeaderboardEntry>> = _leaderboard.asStateFlow()
     
     // Estado del juego actual
+    /** Datos completos del tablero y turnos de la partida en curso. */
     private val _currentGameState = MutableStateFlow<GameMessage.Response.GameState?>(null)
     val currentGameState: StateFlow<GameMessage.Response.GameState?> = _currentGameState.asStateFlow()
     
     // Mensajes de error/notificación
+    /** Mensaje efímero de texto para mostrar al usuario (Snackbars/Alerts). */
     private val _notification = MutableStateFlow<String?>(null)
     val notification: StateFlow<String?> = _notification.asStateFlow()
 
     // Historial de batalla
+    /** Lista de eventos sucedidos en el combate actual. */
     private val _battleEvents = MutableStateFlow<List<BattleEvent>>(emptyList())
     val battleEvents: StateFlow<List<BattleEvent>> = _battleEvents.asStateFlow()
     
     // Configuración actual del juego
+    /** Configuración de partida (tamaño, tiempo, etc.) editada o sincronizada. */
     private val _currentConfig = MutableStateFlow(GameConfig())
     val currentConfig: StateFlow<GameConfig> = _currentConfig.asStateFlow()
     
@@ -207,7 +215,8 @@ class GameViewModel(
     }
 
     /**
-     * Dispara a una coordenada.
+     * Envía una solicitud de ataque a una coordenada al servidor.
+     * @param coordinate Coordenada (x, y) donde el usuario ha hecho click.
      */
     fun sendAttack(coordinate: Coordinate) {
         val currentTurn = _currentGameState.value?.currentTurn
@@ -485,19 +494,29 @@ class GameViewModel(
     }
 }
 
+/** Representa un evento textual en el log de batalla. */
 data class BattleEvent(val message: String, val color: Color, val timestamp: Long)
 
 /**
- * Estados de la UI.
+ * Estados de la navegación y fase de UI.
  */
 sealed class UIState {
+    /** Menú principal y splash inicial. */
     data object MainMenu : UIState()
-    data object OnlineMenu : UIState() // Nuevo estado
+    /** Menú de selección de modo online (PVP, Sala Privada, etc.). */
+    data object OnlineMenu : UIState()
+    /** Pantalla de ajustes de juego. */
     data object Settings : UIState()
+    /** Pantalla de espera durante el matchmaking. */
     data object Matchmaking : UIState()
+    /** Pantalla de colocación manual de barcos. */
     data class ShipPlacement(val gameId: String, val opponentName: String) : UIState()
+    /** Sala de espera previa al inicio (Lobby). */
     data class Lobby(val status: GameMessage.Matchmaking.LobbyStatus) : UIState()
+    /** Pantalla principal de combate. */
     data class Battle(val gameId: String) : UIState()
+    /** Informe de estadísticas y ranking. */
     data object Records : UIState()
+    /** Pantalla final con el resultado de la partida. */
     data class GameOver(val result: GameMessage.Response.GameOver) : UIState()
 }

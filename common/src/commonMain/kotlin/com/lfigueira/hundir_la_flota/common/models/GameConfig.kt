@@ -117,6 +117,8 @@ data class GameConfig(
  */
 @Serializable
 data class ShipDefinition(
+    /** Tipo de barco (portaaviones, destructor, etc.) */
     val type: ShipType,
+    /** Cantidad de barcos de este tipo a incluir en la flota */
     val count: Int
 )

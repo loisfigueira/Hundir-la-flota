@@ -9,26 +9,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 /**
- * Modern & Refined Palette (Ocean & Tactical)
- * Focuses on high contrast and professional warmth.
+ * Definición de colores premium inspirados en interfaces tácticas y ciencia ficción.
  */
 object ModernColors {
-    // Core Neutrals
+    // Core Neutrals (These are now unused if primary/secondary/etc. are redefined directly)
+    // Keeping them for now as the instruction only specified changes to specific tokens.
     val DeepSpace = Color(0xFF0F1115)     // Deep background
     val MidnightAsh = Color(0xFF1A1D23)   // Card/Surface
     val SurfaceLighter = Color(0xFF252A32) // Hover/Interaction
-    
-    // Brand & Tactical Colors
+
+    // Brand & Tactical Colors (These are now unused if primary/secondary/etc. are redefined directly)
     val OceanTeal = Color(0xFF26A69A)     // Primary action (high legibility)
     val AmberGold = Color(0xFFFFB300)     // Tactical accents
     val SunsetOrange = Color(0xFFFF7043)  // Hostile/Error
-    val SlateSilver = Color(0xFF90A4AE)   // Soft secondary text
-    
+
     // Semantic Aliases
     val primary = OceanTeal
     val secondary = AmberGold
     val tertiary = Color(0xFF81C784)      // Success / Allies
     val error = SunsetOrange
+    /** Gris metálico para elementos inactivos o bordes. */
+    val SlateSilver = Color(0xFF90A4AE)
     
     val background = DeepSpace
     val surface = MidnightAsh

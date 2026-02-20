@@ -30,8 +30,26 @@ object AppLogger {
         }
     }
 
+    /**
+     * Registra un mensaje informativo.
+     * @param tag Etiqueta identificadora del componente.
+     * @param message Mensaje a registrar.
+     */
     fun info(tag: String, message: String) = log("INFO", tag, message)
+
+    /**
+     * Registra un mensaje de depuración.
+     * @param tag Etiqueta identificadora del componente.
+     * @param message Mensaje a registrar.
+     */
     fun debug(tag: String, message: String) = log("DEBUG", tag, message)
+
+    /**
+     * Registra un mensaje de error y opcionalmente el stacktrace.
+     * @param tag Etiqueta identificadora del componente.
+     * @param message Mensaje a registrar.
+     * @param throwable Excepción capturada (opcional).
+     */
     fun error(tag: String, message: String, throwable: Throwable? = null) {
         log("ERROR", tag, message)
         throwable?.printStackTrace()

@@ -18,10 +18,19 @@ import kotlin.math.min
  * Permite mockear la comunicación en tests de ViewModel.
  */
 interface IGameClient {
+    /** Estado actual de la conexión (desconectado, conectando, conectado, error). */
     val connectionState: StateFlow<ConnectionState>
+    /** Flujo de mensajes entrantes procesados y decodificados. */
     val incomingMessages: SharedFlow<GameMessage>
+    
+    /**
+     * Inicia el proceso de conexión y autenticación.
+     * @return True si se estableció la conexión con éxito.
+     */
     suspend fun connectAndInitialize(host: String, port: Int, playerName: String): Boolean
+    /** Envía un mensaje al servidor. */
     suspend fun send(message: GameMessage)
+    /** Cierra la conexión de forma limpia. */
     suspend fun disconnect()
 }
 
@@ -211,10 +220,18 @@ class GameClient : IGameClient {
     }
 }
 
+/**
+ * Representa los diferentes estados en los que puede estar la conexión del cliente.
+ */
 sealed class ConnectionState {
+    /** El cliente no está intentando conectar. */
     data object Disconnected : ConnectionState()
+    /** El cliente está intentando establecer la conexión inicial. */
     data class Connecting(val attempt: Int, val maxAttempts: Int) : ConnectionState()
+    /** La conexión está activa y estable. */
     data object Connected : ConnectionState()
+    /** La conexión se perdió y se está intentando recuperar automáticamente. */
     data object Reconnecting : ConnectionState()
+    /** Se ha producido un error crítico que impide la conexión. */
     data class Error(val message: String) : ConnectionState()
 }

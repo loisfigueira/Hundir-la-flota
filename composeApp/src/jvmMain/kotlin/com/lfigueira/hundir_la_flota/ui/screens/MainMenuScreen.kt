@@ -14,6 +14,12 @@ import com.lfigueira.hundir_la_flota.common.protocol.AIDifficulty
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
 import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
+/**
+ * Pantalla de bienvenida y menú principal.
+ * Permite al usuario identificarse, conectar al servidor y elegir el modo de juego.
+ * @param viewModel Instancia del ViewModel para gestionar acciones de navegación y conexión.
+ * @param connectionState Estado actual de la conexión de red.
+ */
 @Composable
 fun MainMenuScreen(
     viewModel: GameViewModel,
@@ -145,6 +151,10 @@ fun MainMenuScreen(
     }
 }
 
+/**
+ * Indicador visual del estado de la conexión con el servidor.
+ * @param connectionState Objeto que describe si el cliente está conectado, desconectado o en error.
+ */
 @Composable
 fun ConnectionIndicator(connectionState: ConnectionState) {
     val (text, color) = when (connectionState) {

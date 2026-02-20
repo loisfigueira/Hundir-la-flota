@@ -21,6 +21,12 @@ import com.lfigueira.hundir_la_flota.ui.components.SonarGrid
 import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import kotlin.math.min
 
+/**
+ * Pantalla para la fase inicial de colocación de barcos.
+ * Permite al usuario posicionar su flota antes de que comience el combate.
+ * @param viewModel Instancia del ViewModel para gestionar la confirmación del despliegue.
+ * @param onNavigateBack Callback para regresar al menú anterior.
+ */
 @Composable
 fun ShipPlacementScreen(
     viewModel: GameViewModel,
@@ -115,6 +121,16 @@ fun ShipPlacementScreen(
     }
 }
 
+/**
+ * Área del tablero interactiva para colocar o remover barcos.
+ * @param placements Lista actual de barcos posicionados.
+ * @param selectedShipType Tipo de barco seleccionado para colocar.
+ * @param currentOrientation Orientación (H/V) para el siguiente barco.
+ * @param currentCounts Cantidad de barcos que faltan por colocar por tipo.
+ * @param viewModel ViewModel para acceder a la configuración.
+ * @param boardSize Dimensión del tablero.
+ * @param onPlacementsChange Callback disparado al actualizar la lista de posiciones.
+ */
 @Composable
 fun PlacementGridArea(
     placements: List<ShipPlacement>,
@@ -250,6 +266,11 @@ fun InventoryItem(
     }
 }
 
+/**
+ * Calcula todas las coordenadas ocupadas por un barco según su posición, tipo y orientación.
+ * @param ship Definición del barco y su origen.
+ * @return Lista de coordenadas (x, y) que ocupa el barco.
+ */
 fun getShipCoordinates(ship: ShipPlacement): List<Coordinate> {
     val coords = mutableListOf<Coordinate>()
     for (i in 0 until ship.type.size) {
@@ -260,6 +281,13 @@ fun getShipCoordinates(ship: ShipPlacement): List<Coordinate> {
     return coords
 }
 
+/**
+ * Valida si un barco puede colocarse en una posición determinada sin solaparse ni salirse del tablero.
+ * @param newShip El barco que se intenta colocar.
+ * @param existingShips Lista de barcos ya colocados.
+ * @param boardSize Tamaño del tablero.
+ * @return True si la posición es legal.
+ */
 fun isValidPlacement(newShip: ShipPlacement, existingShips: List<ShipPlacement>, boardSize: Int = 10): Boolean {
     val newCoords = getShipCoordinates(newShip)
     if (newCoords.any { it.x !in 0 until boardSize || it.y !in 0 until boardSize }) return false

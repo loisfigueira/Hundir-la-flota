@@ -23,39 +23,58 @@ class GameSession(
     private val recordsManager: RecordsManager,
     private val onFinished: (String) -> Unit // Callback para limpieza
 ) {
+    /** Scope para las tareas asíncronas de esta sesión (como el temporizador). */
     private val gameScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    /** Mutex para asegurar la consistencia del estado del juego ante acciones concurrentes. */
     private val gameStateMutex = Mutex()
     
     // Estado del juego
+    /** Indica si la partida está en fase de batalla. */
     private var isGameRunning = false
+    /** El ID del jugador que tiene el turno actual. */
     private var currentTurnPlayerId: String = player1.clientId // Usar clientId
+    /** ID persistente asignado a la IA. */
     private val botId = "BOT_HUNTER_ID"
+    /** Nombre visual de la IA según su dificultad. */
     private val botName = "Bot Hunter (${difficulty.name})"
+    /** Referencia al trabajo del cronómetro del turno. */
     private var turnTimerJob: Job? = null
     
     // Sistema de Rondas (Best of X)
+    /** Número de la ronda actual. */
     private var currentRound: Int = 1
+    /** Recuento de rondas ganadas por el jugador 1. */
     private var player1RoundsWon: Int = 0
+    /** Recuento de rondas ganadas por el jugador 2. */
     private var player2RoundsWon: Int = 0
+    /** Tamaño del tablero (generalmente 10x10). */
     private val boardSize: Int = config.boardSize
     
     // Tableros autoritativos (Barcos reales)
+    /** Barcos colocados por el jugador 1. */
     private val player1Ships = mutableListOf<ShipPlacement>()
+    /** Barcos colocados por el jugador 2 (o el bot). */
     private val player2Ships = mutableListOf<ShipPlacement>()
     
     // Historial de disparos recibidos (para calcular stats y evitar repetidos)
+    /** Lista de coordenadas donde ha recibido disparos el jugador 1. */
     private val player1ReceivedShots = mutableListOf<Coordinate>() // Disparos que player1 RECIBIÓ
+    /** Lista de coordenadas donde ha recibido disparos el jugador 2 o el Bot. */
     private val player2ReceivedShots = mutableListOf<Coordinate>() // Disparos que player2 RECIBIÓ (o Bot)
     
     // AI Controller (solo para PvE)
+    /** Inteligencia artificial encargada de los disparos del bot. */
     private val enemyAI = if (isPvE) EnemyAI(difficulty) else null
     
     // Stats tracking en memoria para esta partida
+    /** Estadísticas acumuladas por el jugador 1 en esta sesión. */
     private val p1Stats = GameSessionStats()
+    /** Estadísticas acumuladas por el jugador 2 o el bot en esta sesión. */
     private val p2Stats = GameSessionStats() // O Stats del Bot
     
-    // Estado de preparación
+    /** Flag que indica si el jugador 1 ha terminado de colocar sus barcos. */
     private var p1Ready = false
+    /** Flag que indica si el jugador 2 (o bot) ha terminado de colocar sus barcos. */
     private var p2Ready = isPvE // Bot siempre listo tras colocar barcos internamente
     
     init {
@@ -88,6 +107,11 @@ class GameSession(
         }
     }
 
+    /**
+     * Genera el mensaje de estado completo adaptado para un jugador específico (ocultando barcos enemigos).
+     * @param forPlayer El jugador para el cual se genera el mensaje.
+     * @return Mensaje de estado de la partida preparado para ser enviado.
+     */
     private fun createGameStateMessage(forPlayer: IClientHandler): GameMessage.Response.GameState {
         val isP1 = forPlayer == player1
         val myShips = if (isP1) player1Ships else player2Ships
@@ -194,6 +218,9 @@ class GameSession(
         }
     }
     
+    /**
+     * Comprueba si ambos jugadores están listos para iniciar el combate.
+     */
     private suspend fun checkStartGame() {
         if (p1Ready && p2Ready) {
             AppLogger.debug("GameSession", "[GameSession-$gameId] Cambiando fase a BATTLE tras despliegue de ${player1.playerName}")
@@ -320,6 +347,9 @@ class GameSession(
         player2?.sendMessage(msg)
     }
     
+    /**
+     * Cambia el turno al siguiente jugador y reinicia el cronómetro.
+     */
     private fun switchTurn() {
         turnTimerJob?.cancel()
         
@@ -491,11 +521,20 @@ class GameSession(
         }
     }
 
+    /**
+     * Maneja la rendición de un jugador.
+     * @param player El jugador que se rinde.
+     */
     private suspend fun handleSurrender(player: IClientHandler) {
         val winner = if (player == player1) player2 else player1
         finishGame(winner, GameOverReason.SURRENDER)
     }
     
+    /**
+     * Finaliza el juego o la ronda, calculando estadísticas y actualizando persistencia si es necesario.
+     * @param winner El jugador que ha ganado la ronda/partida.
+     * @param reason Motivo de finalización.
+     */
     private suspend fun finishGame(winner: IClientHandler?, reason: GameOverReason = GameOverReason.ALL_SHIPS_SUNK) {
         val winnerName = winner?.playerName ?: botName
         val winnerId = winner?.clientId ?: botId
@@ -634,6 +673,11 @@ class GameSession(
         onFinished(gameId)
     }
     
+    /**
+     * Valida que una flota completa cumple con la cantidad de barcos y no hay solapamientos.
+     * @param ships Lista de colocaciones de barcos enviada por el cliente.
+     * @return True si la flota es legal.
+     */
     private fun validateFleet(ships: List<ShipPlacement>): Boolean {
         // Obtener la flota esperada de la configuración
         val expectedFleet = config.getExpandedFleet()

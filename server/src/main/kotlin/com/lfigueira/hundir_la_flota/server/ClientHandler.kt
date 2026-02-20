@@ -17,9 +17,13 @@ import java.util.UUID
  * Permite mockear la comunicación en tests.
  */
 interface IClientHandler {
+    /** ID único del cliente asignado por el servidor. */
     val clientId: String
+    /** Nombre del jugador asociado a este cliente. */
     val playerName: String
+    /** Envía un mensaje de protocolo al cliente. */
     suspend fun sendMessage(message: GameMessage)
+    /** Cierra la conexión y limpia recursos. */
     fun disconnect()
 }
 
@@ -45,7 +49,9 @@ class ClientHandler(
         classDiscriminator = "type"
     }
     
+    /** Marca de tiempo del último latido recibido. */
     private var lastPingTime = System.currentTimeMillis()
+    /** Indica si la conexión sigue considerándose activa. */
     private var isConnected = true
     
     /**
@@ -107,6 +113,9 @@ class ClientHandler(
     }
     
     // Método legacy start() eliminado o adaptado si fuera necesario
+    /**
+     * Versión asíncrona simple para compatibilidad.
+     */
     fun start() {
         scope.launch { startLogic() }
     }

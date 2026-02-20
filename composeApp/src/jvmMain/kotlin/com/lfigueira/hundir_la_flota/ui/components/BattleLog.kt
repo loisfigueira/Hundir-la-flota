@@ -19,6 +19,12 @@ import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.ui.BattleEvent
 import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
+/**
+ * Componente que muestra una lista cronológica de eventos de combate.
+ * Realiza auto-scroll al fondo cuando se añaden nuevos eventos.
+ * @param events Lista de mensajes y sus colores asociados.
+ * @param modifier Modificador de diseño.
+ */
 @Composable
 fun BattleLog(
     events: List<BattleEvent>,

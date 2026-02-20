@@ -10,6 +10,9 @@ import java.security.SecureRandom
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Representa una sala privada accesible mediante un código.
+ */
 data class Room(
     val id: String,
     val code: String,
@@ -19,14 +22,21 @@ data class Room(
 )
 
 class RoomManager(private val gameLogic: GameLogic) {
+    /** Mapa de salas activas indexadas por ID. */
     private val rooms = ConcurrentHashMap<String, Room>() // Key by RoomID
+    /** Mapeo de códigos de sala a IDs de sala. */
     private val roomCodes = ConcurrentHashMap<String, String>() // Key: Code, Value: RoomID
+    /** Mutex para operaciones atómicas sobre las salas. */
     private val mutex = Mutex()
+    /** Generador de números aleatorios para los códigos. */
     private val random = SecureRandom()
+    /** Caracteres permitidos en los códigos de sala. */
     private val charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
     /**
-     * Crea una sala privada.
+     * Crea una nueva sala privada.
+     * @param host El jugador que crea la sala y define la configuración.
+     * @param config Configuración de la partida.
      */
     suspend fun createRoom(host: IClientHandler, config: GameConfig) {
         mutex.withLock {

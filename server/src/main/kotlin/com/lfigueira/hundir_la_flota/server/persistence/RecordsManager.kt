@@ -114,7 +114,9 @@ class RecordsManager(private val recordsFilePath: String = "records.json") {
 
     /**
      * Asegura que existan estadísticas para un jugador y las devuelve.
-     * Si no existen, las crea y guarda inmediatamente.
+     * Si no existen, las crea con valores por defecto y las guarda inmediatamente.
+     * @param playerName Nombre del jugador a verificar.
+     * @return Estadísticas actuales (o nuevas) del jugador.
      */
     suspend fun ensurePlayerStats(playerName: String): PlayerStats = mutex.withLock {
         val existing = recordsData.players[playerName]
@@ -229,7 +231,8 @@ class RecordsManager(private val recordsFilePath: String = "records.json") {
     
     /**
      * Obtiene el leaderboard ordenado por victorias.
-     * Thread-safe.
+     * @param limit Número máximo de entradas a devolver.
+     * @return Lista de entradas del ranking.
      */
     suspend fun getLeaderboard(limit: Int = 10): List<LeaderboardEntry> = mutex.withLock {
         recordsData.players.values

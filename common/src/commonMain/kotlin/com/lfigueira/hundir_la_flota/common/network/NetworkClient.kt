@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 expect class NetworkClient() {
     /**
      * Estado de conexión observable.
+     * Emite true cuando el socket está abierto, false en caso contrario.
      */
     val isConnected: Flow<Boolean>
     
@@ -28,6 +29,7 @@ expect class NetworkClient() {
     
     /**
      * Flujo de mensajes recibidos del servidor.
+     * Cada elemento es una línea de texto completa (JSON).
      */
     fun receive(): Flow<String>
     

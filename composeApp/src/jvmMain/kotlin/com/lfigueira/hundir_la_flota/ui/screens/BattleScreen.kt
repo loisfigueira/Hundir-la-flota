@@ -24,6 +24,11 @@ import com.lfigueira.hundir_la_flota.ui.components.SonarGrid
 import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import kotlin.math.min
 
+/**
+ * Pantalla principal de la fase de batalla.
+ * Muestra el radar enemigo, la flota propia en un minimapa y el registro de eventos.
+ * @param viewModel Instancia del ViewModel para observar el estado del juego.
+ */
 @Composable
 fun BattleScreen(viewModel: GameViewModel) {
     val gameState by viewModel.currentGameState.collectAsState()
@@ -159,6 +164,13 @@ fun BattleScreen(viewModel: GameViewModel) {
     }
 }
 
+/**
+ * Cabecera táctica que muestra información del jugador, estado del sistema y tiempo restante.
+ * @param playerName Identificador visual del operador.
+ * @param status Mensaje de estado de la operación actual.
+ * @param timeLeft Segundos restantes para el turno.
+ * @param isConnected Estado del enlace de datos con el servidor.
+ */
 @Composable
 fun TacticalHeader(
     playerName: String,
