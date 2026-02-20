@@ -47,9 +47,24 @@ compose.desktop {
         mainClass = "com.lfigueira.hundir_la_flota.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.lfigueira.hundir_la_flota"
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe, TargetFormat.AppImage)
+            packageName = "HundirLaFlota"
             packageVersion = "1.0.0"
+            description = "Clásico juego de Hundir la Flota - Cliente"
+            copyright = "© 2026 Lois Figueira"
+            vendor = "Lois Figueira"
+            
+            linux {
+                shortcut = true
+                packageName = "hundir-la-flota"
+                menuGroup = "Games"
+            }
+            windows {
+                shortcut = true
+                console = false
+                dirChooser = true
+                packageName = "HundirLaFlota"
+            }
         }
     }
 }

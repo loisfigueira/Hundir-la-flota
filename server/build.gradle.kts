@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization") version "2.1.0"
     application
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
@@ -21,4 +22,10 @@ kotlin {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+}
+
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    archiveBaseName.set("HundirLaFlotaServer")
+    archiveClassifier.set("")
+    archiveVersion.set("1.0.0")
 }
