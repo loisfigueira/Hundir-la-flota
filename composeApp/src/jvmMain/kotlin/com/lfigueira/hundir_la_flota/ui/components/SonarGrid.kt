@@ -3,6 +3,7 @@ package com.lfigueira.hundir_la_flota.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
@@ -22,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.common.protocol.*
 import com.lfigueira.hundir_la_flota.generated.resources.Res
 import com.lfigueira.hundir_la_flota.generated.resources.hit_marker
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -32,16 +33,16 @@ fun SonarGrid(
     onCellClick: (Coordinate) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val neonColor = if (isRadar) CyberColors.NeonGreen else CyberColors.NeonBlue
+    val accentColor = if (isRadar) ModernColors.AmberGold else ModernColors.WarmTeal
     val boardSize = boardState.size
     
-    // Contenedor principal con BoxWithConstraints para cálculos dinámicos
+    // Contenedor principal
     BoxWithConstraints(
         modifier = modifier
-            .aspectRatio(1f) // Mantener proporción cuadrada por defecto
-            .border(2.dp, neonColor)
-            .background(CyberColors.DarkSpace)
-            .padding(2.dp)
+            .aspectRatio(1f)
+            .border(1.dp, accentColor.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+            .background(ModernColors.DeepAsh)
+            .padding(1.dp)
     ) {
         // Cálculo de celda dinámico - FUERZA EL TAMAÑO SEGÚN EL ANCHO DISPONIBLE
         // val availableSize = minOf(maxWidth, maxHeight) // Eliminamos el minOf para seguir la instrucción verbatim
@@ -77,12 +78,12 @@ fun SonarGrid(
                                 coord = coord,
                                 state = cellState,
                                 isRadar = isRadar,
-                                neonColor = neonColor,
+                                accentColor = accentColor,
                                 ships = boardState.ships,
                                 onClick = { onCellClick(coord) },
                                 modifier = Modifier
                                     .size(cellSize)
-                                    .border(lineThickness, neonColor.copy(alpha = 0.2f)),
+                                    .border(lineThickness, accentColor.copy(alpha = 0.1f)),
                                 fontSize = fontSize,
                                 iconScale = iconScale
                             )
@@ -108,8 +109,8 @@ fun SonarGrid(
                     drawLine(
                         brush = Brush.verticalGradient(
                             0f to Color.Transparent,
-                            0.9f to neonColor.copy(alpha = 0.5f),
-                            1f to neonColor
+                            0.7f to accentColor.copy(alpha = 0.3f),
+                            1f to accentColor.copy(alpha = 0.6f)
                         ),
                         start = Offset(0f, yPos),
                         end = Offset(size.width, yPos),
@@ -126,7 +127,7 @@ fun SonarCell(
     coord: Coordinate,
     state: CellState,
     isRadar: Boolean,
-    neonColor: Color,
+    accentColor: Color,
     ships: List<ShipState>?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -137,7 +138,7 @@ fun SonarCell(
     val isHovered by interactionSource.collectIsHoveredAsState()
     
     val backgroundColor by animateColorAsState(
-        if (isHovered) neonColor.copy(alpha = 0.15f) else Color.Transparent
+        if (isHovered) accentColor.copy(alpha = 0.1f) else Color.Transparent
     )
     
     // Animation for hits
@@ -170,15 +171,19 @@ fun SonarCell(
             CellState.HIT -> {
                 Box(
                     Modifier.fillMaxSize()
-                        .background(CyberColors.NeonRed.copy(alpha = 0.2f * blinkAlpha))
-                        .border(1.dp, CyberColors.NeonRed.copy(alpha = blinkAlpha))
+                        .background(ModernColors.SunsetOrange.copy(alpha = 0.15f * blinkAlpha))
+                        .border(1.dp, ModernColors.AmberGold.copy(alpha = 0.4f * blinkAlpha))
                 )
                 Image(
                     painter = painterResource(Res.drawable.hit_marker),
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxSize(0.6f * iconScale)
-                        .graphicsLayer(alpha = blinkAlpha)
+                        .fillMaxSize(0.65f * iconScale)
+                        .graphicsLayer {
+                            alpha = blinkAlpha
+                            scaleX = 0.9f + (0.1f * blinkAlpha)
+                            scaleY = 0.9f + (0.1f * blinkAlpha)
+                        }
                 )
             }
             CellState.MISS -> {
@@ -193,7 +198,7 @@ fun SonarCell(
                 )
                 Canvas(modifier = Modifier.fillMaxSize(0.7f * iconScale)) {
                     drawCircle(
-                        color = CyberColors.NeonBlue.copy(alpha = 0.4f * (1f - rippleScale)),
+                        color = ModernColors.primary.copy(alpha = 0.4f * (1f - rippleScale)),
                         radius = (size.minDimension / 2) * rippleScale,
                         style = Stroke(width = (size.minDimension / 20))
                     )
@@ -206,15 +211,16 @@ fun SonarCell(
                     if (shipAtTail != null) {
                         // Drawing metallic ship part
                         Box(
-                            Modifier.fillMaxSize(0.8f * iconScale)
+                            Modifier.fillMaxSize(0.85f * iconScale)
                                 .background(
                                     Brush.linearGradient(
-                                        listOf(CyberColors.MetallicGray, Color.DarkGray, CyberColors.MetallicGray)
-                                    )
+                                        listOf(ModernColors.WarmTeal.copy(alpha = 0.8f), ModernColors.WarmTeal, ModernColors.WarmTeal.copy(alpha = 0.8f))
+                                    ),
+                                    shape = RoundedCornerShape(2.dp)
                                 )
-                                .border(1.dp, neonColor.copy(alpha = 0.5f))
+                                .border(1.dp, ModernColors.SoftWhite.copy(alpha = 0.2f), RoundedCornerShape(2.dp))
                                 .graphicsLayer {
-                                    shadowElevation = 8f
+                                    shadowElevation = 4f
                                     clip = true
                                 }
                         )
@@ -227,8 +233,8 @@ fun SonarCell(
         if (isHovered) {
             Text(
                 text = "${coord.x},${coord.y}",
-                color = neonColor,
-                fontSize = fontSize * 0.6f, // Coordenadas más pequeñas
+                color = accentColor.copy(alpha = 0.6f),
+                fontSize = fontSize * 0.55f, // Coordenadas más pequeñas
                 modifier = Modifier.align(Alignment.BottomEnd).padding(1.dp)
             )
         }

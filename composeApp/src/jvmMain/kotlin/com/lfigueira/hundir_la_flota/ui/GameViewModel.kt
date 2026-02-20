@@ -9,7 +9,7 @@ import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.protocol.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import androidx.compose.ui.graphics.Color
 
 /**
@@ -409,7 +409,7 @@ class GameViewModel(
                     ShotResult.SUNK -> "¡Hundido! ${message.shipSunkType?.name}"
                 }
                 AppLogger.info("GameViewModel", "Resultado de mi ataque en (${message.pos.x}, ${message.pos.y}): $resultText")
-                addBattleEvent("Tú disparas a (${message.pos.x}, ${message.pos.y}): $resultText", if(message.result != ShotResult.MISS) CyberColors.NeonBlue else Color.Gray)
+                addBattleEvent("Tú disparas a (${message.pos.x}, ${message.pos.y}): $resultText", if(message.result != ShotResult.MISS) ModernColors.primary else ModernColors.textSecondary)
             }
             
             is GameMessage.Response.OpponentAttackResult -> {
@@ -419,13 +419,13 @@ class GameViewModel(
                     ShotResult.SUNK -> "hundió tu ${message.shipSunkType?.name}"
                 }
                 AppLogger.info("GameViewModel", "Ataque enemigo en (${message.pos.x}, ${message.pos.y}): $resultText")
-                addBattleEvent("Enemigo dispara a (${message.pos.x}, ${message.pos.y}) y $resultText", if(message.result != ShotResult.MISS) CyberColors.NeonRed else Color.Gray)
+                addBattleEvent("Enemigo dispara a (${message.pos.x}, ${message.pos.y}) y $resultText", if(message.result != ShotResult.MISS) ModernColors.error else ModernColors.textSecondary)
             }
             
             is GameMessage.Response.GameOver -> {
                 val isWinner = message.winnerId == myPlayerId
                 AppLogger.info("GameViewModel", "GameOver. Ganador: ${message.winnerId}. Soy ganador: $isWinner")
-                addBattleEvent(if (isWinner) "¡MISIÓN CUMPLIDA! VICTORIA" else "ERROR CRÍTICO: DERROTA", if(isWinner) CyberColors.NeonGreen else CyberColors.NeonRed)
+                addBattleEvent(if (isWinner) "¡MISIÓN CUMPLIDA! VICTORIA" else "ERROR CRÍTICO: DERROTA", if(isWinner) ModernColors.WarmTeal else ModernColors.error)
                 _uiState.value = UIState.GameOver(message)
             }
             

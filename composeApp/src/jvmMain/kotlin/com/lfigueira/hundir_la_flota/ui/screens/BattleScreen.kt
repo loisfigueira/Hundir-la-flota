@@ -20,7 +20,7 @@ import com.lfigueira.hundir_la_flota.common.protocol.*
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
 import com.lfigueira.hundir_la_flota.ui.components.BattleLog
 import com.lfigueira.hundir_la_flota.ui.components.SonarGrid
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import kotlin.math.min
 
 @Composable
@@ -31,7 +31,7 @@ fun BattleScreen(viewModel: GameViewModel) {
     
     if (gameState == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = CyberColors.NeonBlue)
+            CircularProgressIndicator(color = ModernColors.primary)
         }
         return
     }
@@ -45,7 +45,7 @@ fun BattleScreen(viewModel: GameViewModel) {
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(CyberColors.DeepNavy, CyberColors.DarkSpace)
+                    listOf(ModernColors.DeepAsh, ModernColors.SurfaceDark)
                 )
             )
     ) {
@@ -54,10 +54,10 @@ fun BattleScreen(viewModel: GameViewModel) {
             val screenHeight = maxHeight
             
             Column(Modifier.fillMaxSize()) {
-                // Military Header
-                MilitaryHeader(
-                    playerName = "COMANDANTE: ${viewModel.myPlayerId.take(8)}",
-                    status = if(isMyTurn) "TU TURNO - SOLICITANDO ATAQUE" else "TURNO ENEMIGO - EVALUANDO DAÑOS",
+                // Tactical Header
+                TacticalHeader(
+                    playerName = "OPERADOR: ${viewModel.myPlayerId.take(8)}",
+                    status = if(isMyTurn) "ORDENANDO FUEGO" else "ESPERANDO CONFIRMACIÓN",
                     timeLeft = state.turnTimeSeconds,
                     isConnected = connState.toString().contains("Connected")
                 )
@@ -120,9 +120,9 @@ fun BattleScreen(viewModel: GameViewModel) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     modifier = Modifier
-                                        .background(Color.Black.copy(alpha = 0.7f))
+                                        .background(ModernColors.SurfaceDark.copy(alpha = 0.8f))
                                         .padding(4.dp)
-                                        .border(1.dp, CyberColors.NeonBlue.copy(alpha = 0.3f))
+                                        .border(1.dp, ModernColors.primary.copy(alpha = 0.4f))
                                 ) {
                                     BoardContainer(label = "MI SECTOR", size = minimapSize) {
                                         key(boardSize) {
@@ -147,8 +147,8 @@ fun BattleScreen(viewModel: GameViewModel) {
                 ) {
                     OutlinedButton(
                         onClick = { viewModel.endSession() },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = CyberColors.NeonRed),
-                        border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(CyberColors.NeonRed, Color.Transparent)))
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ModernColors.error),
+                        border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(ModernColors.error, Color.Transparent)))
                     ) {
                         Text("ABORTAR MISIÓN", fontSize = 11.sp, softWrap = false)
                     }
@@ -159,7 +159,7 @@ fun BattleScreen(viewModel: GameViewModel) {
 }
 
 @Composable
-fun MilitaryHeader(
+fun TacticalHeader(
     playerName: String,
     status: String,
     timeLeft: Int,
@@ -172,31 +172,31 @@ fun MilitaryHeader(
         Column(Modifier.weight(1f)) {
             Text(
                 text = playerName,
-                style = MaterialTheme.typography.titleSmall,
-                color = CyberColors.NeonBlue,
+                style = MaterialTheme.typography.titleMedium,
+                color = ModernColors.primary,
                 softWrap = false
             )
             Text(
-                text = "ESTADO: $status",
-                color = Color.White.copy(alpha = 0.7f),
-                fontSize = 10.sp,
+                text = "SYSTEM: $status",
+                color = ModernColors.textSecondary,
+                fontSize = 11.sp,
                 softWrap = false
             )
         }
         
         Spacer(Modifier.width(16.dp))
 
-        // Digital Timer
+        // Amber Timer
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.3f)),
-            border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(CyberColors.NeonBlue, Color.Transparent)))
+            colors = CardDefaults.cardColors(containerColor = ModernColors.DeepAsh),
+            border = ButtonDefaults.outlinedButtonBorder.copy(brush = Brush.linearGradient(listOf(ModernColors.primary.copy(alpha = 0.5f), Color.Transparent)))
         ) {
-             val timerColor = if (timeLeft < 10) CyberColors.NeonRed else CyberColors.NeonGreen
+             val timerColor = if (timeLeft < 10) ModernColors.error else ModernColors.secondary
              Text(
-                text = "T-MINUS: ${timeLeft.toString().padStart(2, '0')}S",
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                text = "T-REM: ${timeLeft.toString().padStart(2, '0')}s",
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
                 style = TextStyle(
-                    fontFamily = FontFamily.Monospace,
+                    fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = timerColor
@@ -205,17 +205,17 @@ fun MilitaryHeader(
              )
         }
 
-        Spacer(Modifier.width(16.dp))
+        Spacer(Modifier.width(20.dp))
 
         // Connection Status
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val dotColor = if (isConnected) CyberColors.NeonGreen else CyberColors.NeonRed
-            Box(Modifier.size(6.dp).background(dotColor, shape = CircleShape))
-            Spacer(Modifier.width(6.dp))
+            val dotColor = if (isConnected) ModernColors.WarmTeal else ModernColors.error
+            Box(Modifier.size(8.dp).background(dotColor, shape = CircleShape))
+            Spacer(Modifier.width(8.dp))
             Text(
-                text = if (isConnected) "P-LINK OK" else "LINK LOST",
+                text = if (isConnected) "LINK ONLINE" else "LINK OFFLINE",
                 color = dotColor,
-                fontSize = 10.sp,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 softWrap = false
             )

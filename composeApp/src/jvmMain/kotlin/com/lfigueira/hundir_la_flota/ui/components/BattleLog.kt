@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.ui.BattleEvent
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
 @Composable
 fun BattleLog(
@@ -34,16 +34,15 @@ fun BattleLog(
 
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(CyberColors.DarkSpace.copy(alpha = 0.6f))
-            .border(1.dp, CyberColors.NeonBlue.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-            .padding(12.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .background(ModernColors.DeepAsh.copy(alpha = 0.5f))
+            .border(1.dp, ModernColors.primary.copy(alpha = 0.2f), RoundedCornerShape(6.dp))
+            .padding(10.dp)
     ) {
         Text(
-            "REGISTRO DE COMBATE",
-            color = CyberColors.NeonBlue,
-            fontSize = 12.sp,
-            letterSpacing = 1.sp,
+            "REGISTRO TÁCTICO",
+            style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
+            color = ModernColors.primary,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         

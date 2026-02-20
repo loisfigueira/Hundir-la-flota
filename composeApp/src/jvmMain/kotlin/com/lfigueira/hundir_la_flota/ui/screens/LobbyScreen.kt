@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.common.protocol.GameMessage
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
 @Composable
 fun LobbyScreen(
@@ -32,7 +32,7 @@ fun LobbyScreen(
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    listOf(CyberColors.DeepNavy, Color.Black)
+                    listOf(ModernColors.backgroundDark, ModernColors.backgroundLight)
                 )
             ),
         contentAlignment = Alignment.Center
@@ -41,9 +41,9 @@ fun LobbyScreen(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .fillMaxHeight(0.85f),
-            colors = CardDefaults.cardColors(containerColor = CyberColors.DarkSpace.copy(alpha = 0.95f)),
-            shape = RoundedCornerShape(16.dp),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberColors.NeonBlue)
+            colors = CardDefaults.cardColors(containerColor = ModernColors.cardBackground.copy(alpha = 0.9f)),
+            shape = RoundedCornerShape(12.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, ModernColors.primary.copy(alpha = 0.3f))
         ) {
             Column(
                 modifier = Modifier.padding(24.dp).fillMaxSize(),
@@ -51,22 +51,22 @@ fun LobbyScreen(
             ) {
                 // TÍTULO
                 Text(
-                    text = if (lobbyState.roomCode != null) "SALA PRIVADA" else "SALA DE ESPERA",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = CyberColors.NeonBlue,
+                    text = if (lobbyState.roomCode != null) "SALA ESTRATÉGICA" else "CENTRAL DE RECLUTAMIENTO",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = ModernColors.primary,
                     fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp
+                    letterSpacing = 1.sp
                 )
                 
                 // CÓDIGO DE SALA (Si existe)
                 if (lobbyState.roomCode != null) {
                     Spacer(Modifier.height(16.dp))
                     Text(
-                        text = "CÓDIGO: ${lobbyState.roomCode}",
+                        text = "ID SALA: ${lobbyState.roomCode}",
                         style = MaterialTheme.typography.headlineMedium,
-                        color = CyberColors.NeonGreen,
+                        color = ModernColors.secondary,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 4.sp
+                        letterSpacing = 2.sp
                     )
                     Text(
                         text = "Comparte este código con tu amigo",
@@ -102,9 +102,9 @@ fun LobbyScreen(
                 
                 // Vizualización de Jugadores (Igual que antes)
                 Text(
-                    text = "JUGADORES CONECTADOS (${lobbyState.players.size}/${lobbyState.maxPlayers})",
-                    color = CyberColors.textPrimary,
-                    fontSize = 14.sp
+                    text = "RECLUTAS EN POSICIÓN (${lobbyState.players.size}/${lobbyState.maxPlayers})",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = ModernColors.textSecondary
                 )
                 
                 Spacer(Modifier.height(16.dp))
@@ -127,16 +127,15 @@ fun LobbyScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    color = CyberColors.NeonGreen,
+                                    modifier = Modifier.size(24.dp),
+                                    color = ModernColors.primary,
                                     strokeWidth = 2.dp
                                 )
-                                Spacer(Modifier.width(8.dp))
+                                Spacer(Modifier.width(12.dp))
                                 Text(
-                                    text = "Esperando oponente...",
-                                    color = CyberColors.NeonGreen,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(top = 30.dp)
+                                    text = "Buscando enlace...",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = ModernColors.primary
                                 )
                             }
                         }
@@ -147,11 +146,11 @@ fun LobbyScreen(
                 
                 Button(
                     onClick = { viewModel.cancelMatchmaking() },
-                    colors = ButtonDefaults.buttonColors(containerColor = CyberColors.NeonRed.copy(alpha = 0.2f)),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, CyberColors.NeonRed),
-                    modifier = Modifier.fillMaxWidth()
+                    colors = ButtonDefaults.buttonColors(containerColor = ModernColors.error.copy(alpha = 0.7f)),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth().height(48.dp)
                 ) {
-                    Text("SALIR DE LA SALA", color = CyberColors.NeonRed)
+                    Text("ABORTAR OPERACIÓN", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -163,17 +162,16 @@ fun PlayerLobbyItem(name: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(CyberColors.NeonBlue.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
-            .padding(12.dp),
+            .background(ModernColors.primary.copy(alpha = 0.1f), RoundedCornerShape(6.dp))
+            .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Placeholder Icon (Box) to avoid missing dependency issues
         Box(
             modifier = Modifier
-                .size(24.dp)
-                .background(CyberColors.NeonBlue, androidx.compose.foundation.shape.CircleShape)
+                .size(10.dp)
+                .background(ModernColors.primary, androidx.compose.foundation.shape.CircleShape)
         )
-        Spacer(Modifier.width(12.dp))
-        Text(name, color = Color.White, fontWeight = FontWeight.SemiBold)
+        Spacer(Modifier.width(16.dp))
+        Text(name, color = ModernColors.textPrimary, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium)
     }
 }

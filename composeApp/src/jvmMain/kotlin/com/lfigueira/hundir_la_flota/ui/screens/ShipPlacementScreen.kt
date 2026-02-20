@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.common.protocol.*
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
 import com.lfigueira.hundir_la_flota.ui.components.SonarGrid
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import kotlin.math.min
 
 @Composable
@@ -48,7 +48,7 @@ fun ShipPlacementScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(CyberColors.DeepNavy, CyberColors.DarkSpace)))
+            .background(Brush.verticalGradient(listOf(ModernColors.DeepAsh, ModernColors.SurfaceDark)))
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize().padding(16.dp)) {
             val isPortrait = maxWidth < maxHeight * 0.8f
@@ -60,25 +60,24 @@ fun ShipPlacementScreen(
                 val notification by viewModel.notification.collectAsState()
                 
                 Text(
-                    "DESPLIEGUE DE FLOTA",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
+                    "DESPLIEGUE ESTRATÉGICO",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = ModernColors.primary,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 
                 if (notification?.startsWith("Error") == true) {
                     Text(
                         text = notification!!,
-                        color = CyberColors.NeonRed,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
+                        color = ModernColors.error,
+                        style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 } else {
                     Text(
-                        "POSICIONA TUS ACTIVOS EN EL SECTOR AZUL",
-                        color = Color.White.copy(alpha = 0.6f),
-                        fontSize = 10.sp,
+                        "POSICIONA TUS UNIDADES EN EL SECTOR TÁCTICO",
+                        color = ModernColors.textSecondary,
+                        style = MaterialTheme.typography.labelSmall,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
                 }
@@ -167,9 +166,9 @@ fun InventoryPanel(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Text(
-            "INVENTARIO TÁCTICO",
-            style = MaterialTheme.typography.titleSmall,
-            color = CyberColors.NeonBlue
+            "RESERVAS DISPONIBLES",
+            style = MaterialTheme.typography.labelSmall,
+            color = ModernColors.secondary
         )
         Spacer(modifier = Modifier.height(8.dp))
         
@@ -195,26 +194,28 @@ fun InventoryPanel(
                     onRotate(if (currentOrientation == Orientation.HORIZONTAL) 
                         Orientation.VERTICAL else Orientation.HORIZONTAL)
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = CyberColors.MetallicGray),
-                modifier = Modifier.weight(0.4f).height(40.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = ModernColors.DeepAsh),
+                modifier = Modifier.weight(0.4f).height(44.dp),
+                shape = RoundedCornerShape(4.dp),
                 contentPadding = PaddingValues(4.dp)
             ) {
-                Text(if(currentOrientation == Orientation.HORIZONTAL) "ROTAR: H" else "ROTAR: V", fontSize = 10.sp)
+                Text(if(currentOrientation == Orientation.HORIZONTAL) "EJE: H" else "EJE: V", style = MaterialTheme.typography.labelSmall)
             }
             
             Button(
                 onClick = { viewModel.confirmDeployment(placements) },
                 enabled = isFleetComplete,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFleetComplete) CyberColors.NeonGreen else CyberColors.MetallicGray,
-                    contentColor = Color.Black
+                    containerColor = if (isFleetComplete) ModernColors.AmberGold else ModernColors.DeepAsh.copy(alpha = 0.5f),
+                    contentColor = if (isFleetComplete) Color.Black else ModernColors.textSecondary
                 ),
-                modifier = Modifier.weight(0.6f).height(40.dp)
+                shape = RoundedCornerShape(4.dp),
+                modifier = Modifier.weight(0.6f).height(44.dp)
             ) {
                 Text(
-                    if (isFleetComplete) "ORDENAR DESPLIEGUE" else "FALTA FLOTA",
+                    if (isFleetComplete) "INICIAR COMBATE" else "FLOTA INCOMPLETA",
+                    style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 10.sp,
                     softWrap = false
                 )
             }
@@ -229,8 +230,8 @@ fun InventoryItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val borderColor by animateColorAsState(if (isSelected) CyberColors.NeonBlue else Color.Transparent)
-    val bgColor = if (isSelected) CyberColors.NeonBlue.copy(alpha = 0.1f) else CyberColors.DarkSpace.copy(alpha = 0.4f)
+    val borderColor by animateColorAsState(if (isSelected) ModernColors.primary else Color.Transparent)
+    val bgColor = if (isSelected) ModernColors.primary.copy(alpha = 0.15f) else ModernColors.DeepAsh.copy(alpha = 0.4f)
 
     Row(
         modifier = Modifier
@@ -242,10 +243,10 @@ fun InventoryItem(
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val textColor = if (remaining > 0) Color.White else Color.Gray
-        Text("${type.name} [${type.size}U]", color = textColor, fontSize = 11.sp, modifier = Modifier.weight(1f), softWrap = false)
+        val textColor = if (remaining > 0) ModernColors.textPrimary else ModernColors.textSecondary
+        Text("${type.name} [${type.size}S]", color = textColor, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), softWrap = false)
         Spacer(Modifier.width(8.dp))
-        Text("x$remaining", color = if (remaining > 0) CyberColors.NeonGreen else Color.Gray, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+        Text("x$remaining", color = if (remaining > 0) ModernColors.secondary else ModernColors.textSecondary, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
     }
 }
 

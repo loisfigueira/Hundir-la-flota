@@ -10,6 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -17,7 +19,7 @@ import com.lfigueira.hundir_la_flota.common.models.GameConfig
 import com.lfigueira.hundir_la_flota.common.models.ShipDefinition
 import com.lfigueira.hundir_la_flota.common.protocol.ShipType
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 import kotlin.math.roundToInt
 
 @Composable
@@ -38,8 +40,8 @@ fun SettingsScreen(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        CyberColors.backgroundDark,
-                        CyberColors.backgroundLight
+                        ModernColors.backgroundDark,
+                        ModernColors.backgroundLight
                     )
                 )
             )
@@ -53,10 +55,8 @@ fun SettingsScreen(
         ) {
             // Título
             Text(
-                text = "⚙️ CONFIGURACIÓN",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Bold,
-                color = CyberColors.cyan,
+                text = "AJUSTES DE SISTEMA",
+                style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
             
@@ -65,10 +65,11 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = CyberColors.cardBackground
-                )
+                    containerColor = ModernColors.cardBackground
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp)
@@ -83,16 +84,16 @@ fun SettingsScreen(
                             label = "${boardSize}x${boardSize}"
                         )
                         Text(
-                            text = "Rango: 7x7 a 14x14",
+                            text = "Escala operativa: 7x7 a 14x14",
                             fontSize = 12.sp,
-                            color = CyberColors.textSecondary,
+                            color = ModernColors.textSecondary,
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     }
                     
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.padding(vertical = 16.dp),
-                        color = CyberColors.cyan.copy(alpha = 0.3f)
+                        color = ModernColors.primary.copy(alpha = 0.15f)
                     )
                     
                     // Tiempo de turno
@@ -105,49 +106,20 @@ fun SettingsScreen(
                             label = "$turnTime segundos"
                         )
                         Text(
-                            text = "Rango: 30 a 120 segundos",
+                            text = "Ventana de respuesta: 30 a 120s",
                             fontSize = 12.sp,
-                            color = CyberColors.textSecondary,
+                            color = ModernColors.textSecondary,
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     }
                     
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.padding(vertical = 16.dp),
-                        color = CyberColors.cyan.copy(alpha = 0.3f)
-                    )
-                    
-                    // Número de rondas
-                    ConfigSection(title = "Número de Rondas") {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            RoundButton(
-                                text = "1",
-                                selected = maxRounds == 1,
-                                onClick = { maxRounds = 1 }
-                            )
-                            RoundButton(
-                                text = "Best of 3",
-                                selected = maxRounds == 3,
-                                onClick = { maxRounds = 3 }
-                            )
-                            RoundButton(
-                                text = "Best of 5",
-                                selected = maxRounds == 5,
-                                onClick = { maxRounds = 5 }
-                            )
-                        }
-                    }
-                    
-                    Divider(
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        color = CyberColors.cyan.copy(alpha = 0.3f)
+                        color = ModernColors.primary.copy(alpha = 0.15f)
                     )
                     
                     // Configuración de flota
-                    ConfigSection(title = "Configuración de Flota") {
+                    ConfigSection(title = "ESTRATEGIA") {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
@@ -181,13 +153,13 @@ fun SettingsScreen(
                     onClick = onBack,
                     modifier = Modifier
                         .weight(1f)
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
+                        .height(50.dp),
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = CyberColors.error.copy(alpha = 0.8f)
+                        containerColor = ModernColors.error.copy(alpha = 0.8f)
                     )
                 ) {
-                    Text("Cancelar", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text("DESCARTAR", fontWeight = FontWeight.Bold)
                 }
                 
                 Button(
@@ -203,13 +175,13 @@ fun SettingsScreen(
                     },
                     modifier = Modifier
                         .weight(1f)
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
+                        .height(50.dp),
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = CyberColors.cyan
+                        containerColor = ModernColors.primary
                     )
                 ) {
-                    Text("💾 Guardar", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text("GUARDAR Y APLICAR", fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -223,10 +195,9 @@ private fun ConfigSection(
 ) {
     Column {
         Text(
-            text = title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = CyberColors.cyan,
+            text = title.uppercase(),
+            style = MaterialTheme.typography.titleMedium,
+            color = ModernColors.primary,
             modifier = Modifier.padding(bottom = 12.dp)
         )
         content()
@@ -244,9 +215,8 @@ private fun SliderWithValue(
     Column {
         Text(
             text = label,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = CyberColors.textPrimary,
+            style = MaterialTheme.typography.titleMedium,
+            color = ModernColors.textPrimary,
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Slider(
@@ -255,9 +225,9 @@ private fun SliderWithValue(
             valueRange = valueRange,
             steps = steps,
             colors = SliderDefaults.colors(
-                thumbColor = CyberColors.cyan,
-                activeTrackColor = CyberColors.cyan,
-                inactiveTrackColor = CyberColors.cyan.copy(alpha = 0.3f)
+                thumbColor = ModernColors.primary,
+                activeTrackColor = ModernColors.primary,
+                inactiveTrackColor = ModernColors.primary.copy(alpha = 0.2f)
             )
         )
     }
@@ -272,25 +242,25 @@ private fun RoundButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-            .height(48.dp)
+            .height(44.dp)
             .widthIn(min = 100.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) CyberColors.cyan else CyberColors.cardBackground,
-            contentColor = if (selected) CyberColors.backgroundDark else CyberColors.textPrimary
+            containerColor = if (selected) ModernColors.primary else ModernColors.DeepAsh,
+            contentColor = if (selected) Color.Black else ModernColors.textPrimary
         ),
-        elevation = if (selected) ButtonDefaults.buttonElevation(8.dp) else ButtonDefaults.buttonElevation(0.dp)
+        elevation = ButtonDefaults.buttonElevation(if (selected) 4.dp else 0.dp)
     ) {
         Text(
             text = text,
-            fontSize = 14.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+            fontSize = 13.sp,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium
         )
     }
 }
 
 @Composable
-private fun FleetButton(
+private fun RowScope.FleetButton(
     text: String,
     selected: Boolean,
     onClick: () -> Unit
@@ -298,19 +268,20 @@ private fun FleetButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-            .height(56.dp)
-            .widthIn(min = 150.dp),
-        shape = RoundedCornerShape(12.dp),
+            .height(48.dp)
+            .weight(1f),
+        shape = RoundedCornerShape(6.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) CyberColors.cyan else CyberColors.cardBackground,
-            contentColor = if (selected) CyberColors.backgroundDark else CyberColors.textPrimary
+            containerColor = if (selected) ModernColors.primary else ModernColors.DeepAsh,
+            contentColor = if (selected) Color.Black else ModernColors.textPrimary
         ),
-        elevation = if (selected) ButtonDefaults.buttonElevation(8.dp) else ButtonDefaults.buttonElevation(0.dp)
+        elevation = ButtonDefaults.buttonElevation(if (selected) 4.dp else 0.dp)
     ) {
         Text(
             text = text,
             fontSize = 12.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+            softWrap = false
         )
     }
 }
@@ -319,17 +290,16 @@ private fun FleetButton(
 private fun FleetDetails(fleet: List<ShipDefinition>) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = CyberColors.backgroundDark.copy(alpha = 0.5f)
+            containerColor = ModernColors.DeepAsh.copy(alpha = 0.6f)
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = "Detalles de la Flota:",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = CyberColors.cyan,
+                text = "CARACTERÍSTICAS OPERATIVAS:",
+                style = MaterialTheme.typography.labelSmall,
+                color = ModernColors.secondary,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             fleet.forEach { shipDef ->
@@ -342,24 +312,24 @@ private fun FleetDetails(fleet: List<ShipDefinition>) {
                     Text(
                         text = "${shipDef.count}x ${getShipName(shipDef.type)}",
                         fontSize = 13.sp,
-                        color = CyberColors.textPrimary
+                        color = ModernColors.textPrimary
                     )
                     Text(
-                        text = "(${shipDef.type.size} casillas)",
-                        fontSize = 13.sp,
-                        color = CyberColors.textSecondary
+                        text = "[${shipDef.type.size} SECTORES]",
+                        fontSize = 11.sp,
+                        color = ModernColors.textSecondary,
+                        fontFamily = FontFamily.Monospace
                     )
                 }
             }
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.padding(vertical = 8.dp),
-                color = CyberColors.cyan.copy(alpha = 0.2f)
+                color = ModernColors.primary.copy(alpha = 0.1f)
             )
             Text(
-                text = "Total: ${fleet.sumOf { it.count }} barcos",
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                color = CyberColors.cyan
+                text = "TOTAL: ${fleet.sumOf { it.count }} UNIDADES",
+                style = MaterialTheme.typography.labelSmall,
+                color = ModernColors.primary
             )
         }
     }

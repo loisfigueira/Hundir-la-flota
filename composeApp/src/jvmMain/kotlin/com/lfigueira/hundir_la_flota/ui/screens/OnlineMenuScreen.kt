@@ -7,10 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
 @Composable
 fun OnlineMenuScreen(
@@ -25,9 +26,8 @@ fun OnlineMenuScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "JUEGO ONLINE",
-            style = MaterialTheme.typography.displayMedium,
-            color = CyberColors.NeonBlue
+            text = "OPERACIONES EN RED",
+            style = MaterialTheme.typography.headlineLarge
         )
         
         Spacer(Modifier.height(48.dp))
@@ -35,55 +35,56 @@ fun OnlineMenuScreen(
         // 1. Matchmaking Rápido
         Button(
             onClick = { viewModel.findPvPMatch() },
-            modifier = Modifier.width(300.dp).height(50.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = CyberColors.NeonGreen),
-             shape = RoundedCornerShape(8.dp)
+            modifier = Modifier.width(320.dp).height(56.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = ModernColors.AmberGold),
+            shape = RoundedCornerShape(8.dp)
         ) {
-            Text("BUSCAR PARTIDA RÁPIDA (PvP)", color = Color.Black)
+            Text("MATCHMAKING OPERATIVO (PvP)", color = Color.Black, fontWeight = FontWeight.Bold)
         }
         
         Spacer(Modifier.height(32.dp))
         
-        Divider(color = CyberColors.NeonBlue.copy(alpha=0.3f), thickness = 1.dp, modifier = Modifier.width(200.dp))
+        HorizontalDivider(color = ModernColors.primary.copy(alpha=0.2f), thickness = 1.dp, modifier = Modifier.width(240.dp))
         
         Spacer(Modifier.height(32.dp))
         
         // 2. Salas Privadas
-        Text("SALA PRIVADA", color = CyberColors.textPrimary)
+        Text("ZONA PRIVADA", style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(16.dp))
         
         // Crear
         OutlinedButton(
             onClick = { viewModel.createRoom() },
-            modifier = Modifier.width(300.dp),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = CyberColors.NeonBlue),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberColors.NeonBlue)
+            modifier = Modifier.width(320.dp).height(48.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = ModernColors.primary),
+            border = androidx.compose.foundation.BorderStroke(1.dp, ModernColors.primary.copy(alpha = 0.5f))
         ) {
-            Text("CREAR SALA")
+            Text("GENERAR CÓDIGO DE ACCESO")
         }
         
         Spacer(Modifier.height(16.dp))
         
         // Unirse        
-        Row(Modifier.width(300.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.width(320.dp), verticalAlignment = Alignment.CenterVertically) {
             OutlinedTextField(
                 value = roomCode,
                 onValueChange = { roomCode = it.uppercase() },
-                placeholder = { Text("CÓDIGO") },
+                placeholder = { Text("ID SALA") },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                  colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = CyberColors.NeonBlue,
-                    unfocusedBorderColor = Color.Gray
+                    focusedBorderColor = ModernColors.primary,
+                    unfocusedBorderColor = ModernColors.SlateGray
                 )
             )
             Spacer(Modifier.width(8.dp))
             Button(
                 onClick = { viewModel.joinRoom(roomCode) },
                 enabled = roomCode.length >= 4,
-                colors = ButtonDefaults.buttonColors(containerColor = CyberColors.NeonBlue)
+                colors = ButtonDefaults.buttonColors(containerColor = ModernColors.primary),
+                shape = RoundedCornerShape(4.dp)
             ) {
-                Text("UNIRSE")
+                Text("UNIRSE", fontWeight = FontWeight.Bold)
             }
         }
         

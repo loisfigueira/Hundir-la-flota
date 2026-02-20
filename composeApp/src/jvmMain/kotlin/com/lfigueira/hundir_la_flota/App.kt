@@ -20,7 +20,7 @@ import com.lfigueira.hundir_la_flota.ui.screens.SettingsScreen
 import com.lfigueira.hundir_la_flota.ui.screens.ShipPlacementScreen
 import com.lfigueira.hundir_la_flota.ui.screens.BattleScreen
 import com.lfigueira.hundir_la_flota.common.protocol.GameMessage
-import com.lfigueira.hundir_la_flota.ui.theme.CyberpunkTheme
+import com.lfigueira.hundir_la_flota.ui.theme.ModernTheme
 
 @Composable
 fun App() {
@@ -43,7 +43,7 @@ fun App() {
     val playerStats by viewModel.playerStats.collectAsState()
     val leaderboard by viewModel.leaderboard.collectAsState()
     
-    CyberpunkTheme {
+    ModernTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background

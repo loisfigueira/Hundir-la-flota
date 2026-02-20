@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.lfigueira.hundir_la_flota.common.client.ConnectionState
 import com.lfigueira.hundir_la_flota.common.protocol.AIDifficulty
 import com.lfigueira.hundir_la_flota.ui.GameViewModel
-import com.lfigueira.hundir_la_flota.ui.theme.CyberColors
+import com.lfigueira.hundir_la_flota.ui.theme.ModernColors
 
 @Composable
 fun MainMenuScreen(
@@ -66,10 +66,9 @@ fun MainMenuScreen(
             // Menú principal
             Button(
                 onClick = { viewModel.navigateToOnlineMenu() },
-                modifier = Modifier.width(300.dp),
-                 colors = ButtonDefaults.buttonColors(containerColor = CyberColors.NeonGreen)
+                modifier = Modifier.width(300.dp)
             ) {
-                Text("JUGAR ONLINE", color = Color.Black)
+                Text("JUGAR ONLINE")
             }
             
             Spacer(modifier = Modifier.height(12.dp))

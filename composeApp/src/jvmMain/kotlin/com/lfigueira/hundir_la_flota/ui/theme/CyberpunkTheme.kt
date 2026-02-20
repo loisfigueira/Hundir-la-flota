@@ -9,74 +9,79 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Cyberpunk / Military Palette
-object CyberColors {
-    val DeepNavy = Color(0xFF0A0F1E)
-    val DarkSpace = Color(0xFF03050C)
-    val NeonBlue = Color(0xFF00F2FF)
-    val NeonGreen = Color(0xFF39FF14)
-    val NeonRed = Color(0xFFFF003C)
-    val MetallicGray = Color(0xFF4A4E5D)
-    val TranslucentBlue = Color(0x3300F2FF)
-    val TranslucentGreen = Color(0x3339FF14)
-    val PanelAlpha = 0.7f
+// Modern & Warm Palette
+object ModernColors {
+    val DeepAsh = Color(0xFF121417)
+    val SurfaceDark = Color(0xFF1E2126)
+    val WarmTeal = Color(0xFF4DB6AC)
+    val AmberGold = Color(0xFFFFB300)
+    val SunsetOrange = Color(0xFFFF7043)
+    val SlateGray = Color(0xFF454B54)
+    val SoftWhite = Color(0xFFE0E0E0)
     
-    // Aliases for SettingsScreen and other components
-    val backgroundDark = DarkSpace
-    val backgroundLight = DeepNavy
-    val cyan = NeonBlue
-    val cardBackground = MetallicGray.copy(alpha = 0.3f)
-    val textPrimary = Color.White
-    val textSecondary = Color.White.copy(alpha = 0.7f)
-    val error = NeonRed
+    // Aliases
+    val backgroundDark = DeepAsh
+    val backgroundLight = SurfaceDark
+    val primary = WarmTeal
+    val secondary = AmberGold
+    val cardBackground = SurfaceDark.copy(alpha = 0.8f)
+    val textPrimary = SoftWhite
+    val textSecondary = SoftWhite.copy(alpha = 0.6f)
+    val error = SunsetOrange
 }
 
-private val DarkColorScheme = darkColorScheme(
-    primary = CyberColors.NeonBlue,
-    secondary = CyberColors.NeonGreen,
-    tertiary = CyberColors.NeonRed,
-    background = CyberColors.DeepNavy,
-    surface = CyberColors.DarkSpace,
+private val ModernColorScheme = darkColorScheme(
+    primary = ModernColors.WarmTeal,
+    secondary = ModernColors.AmberGold,
+    tertiary = ModernColors.SunsetOrange,
+    background = ModernColors.DeepAsh,
+    surface = ModernColors.SurfaceDark,
     onPrimary = Color.Black,
     onSecondary = Color.Black,
-    onBackground = Color.White,
-    onSurface = Color.White
+    onBackground = ModernColors.SoftWhite,
+    onSurface = ModernColors.SoftWhite
 )
 
-val CyberTypography = Typography(
+val ModernTypography = Typography(
     headlineLarge = TextStyle(
-        fontFamily = FontFamily.Monospace,
-        fontWeight = FontWeight.Bold,
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.ExtraBold,
         fontSize = 32.sp,
-        letterSpacing = 2.sp,
-        color = CyberColors.NeonBlue
+        letterSpacing = 0.5.sp,
+        color = ModernColors.AmberGold
     ),
     headlineMedium = TextStyle(
-        fontFamily = FontFamily.Monospace,
+        fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        color = CyberColors.NeonBlue
+        color = ModernColors.WarmTeal
     ),
     titleMedium = TextStyle(
-        fontFamily = FontFamily.Monospace,
-        fontWeight = FontWeight.Medium,
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
-        color = CyberColors.NeonGreen
+        color = ModernColors.SoftWhite
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontSize = 16.sp,
-        color = Color.White
+        color = ModernColors.SoftWhite.copy(alpha = 0.9f)
+    ),
+    labelSmall = TextStyle(
+        fontFamily = FontFamily.Monospace, // Keep mono for small tactical labels
+        fontSize = 10.sp,
+        fontWeight = FontWeight.Medium,
+        color = ModernColors.SoftWhite.copy(alpha = 0.5f)
     )
 )
 
 @Composable
-fun CyberpunkTheme(
+fun ModernTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = DarkColorScheme,
-        typography = CyberTypography,
+        colorScheme = ModernColorScheme,
+        typography = ModernTypography,
         content = content
     )
 }
