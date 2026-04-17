@@ -1,4 +1,4 @@
-# Hundir la Flota - Proyecto PSP
+# Hundir la Flota
 
 Este proyecto es una implementación moderna del clásico juego **Hundir la Flota (Battleship)**, desarrollada como una aplicación cliente-servidor utilizando **Kotlin Multiplatform (KMP)**. El enfoque principal ha sido crear una arquitectura robusta, una IA táctica desafiante y una interfaz de usuario moderna.
 
